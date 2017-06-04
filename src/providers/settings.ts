@@ -1,0 +1,1 @@
+export const API_URL = 'http://128.199.210.96/api/index.php/'

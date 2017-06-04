@@ -1,0 +1,31 @@
+<ion-menu [content]="mycontent">
+
+    <ion-content class="bg">
+        <ion-list>
+            <ion-item style="border:0px !important;">
+                <ion-label>ร้านภายใน</ion-label>
+                <ion-select style="color:#fff;width:100%;" [(ngModel)]="province" (ngModelChange)="provinceSelect($event)">
+                    <ion-option *ngFor="let province of provinces" [value]="province.name">{{province.name}}</ion-option>
+                </ion-select>
+            </ion-item>
+            <ion-item class="item-custom" *ngIf="showCountView" style="border:0px !important;">
+                <div class="font-white-color" style="font-size:0.8em;">
+                    จำนวนผู้เข้าชมร้าน: {{paramservice.paramsData.countView}} คน
+                </div>
+            </ion-item>
+            <ion-item class="item-custom" style="border:0px !important;">
+                 <button ion-button menuClose (click)="goToReport()">
+                    แจ้งปัญหา
+                </button>
+            </ion-item>
+            <ion-item class="item-custom" style="border:0px !important;position:absolute;bottom:0px;">
+                 <button ion-button menuClose (click)="signOut()">
+                    ออกจากระบบ
+                </button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+
+</ion-menu>
+
+<ion-nav #mycontent [root]="rootPage"></ion-nav>

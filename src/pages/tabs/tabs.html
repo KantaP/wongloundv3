@@ -1,0 +1,12 @@
+<ion-tabs *ngIf="userType == 1">
+    <ion-tab [root]="tab1Root" tabIcon="home"></ion-tab>
+    <ion-tab [root]="tab4Root" tabIcon="star"></ion-tab>
+    <ion-tab [root]="tab5Root" tabIcon="search"></ion-tab>
+    <ion-tab [root]="tab2Root" tabIcon="person"></ion-tab>
+</ion-tabs> 
+<ion-tabs *ngIf="userType == 2">
+    <ion-tab [root]="tab1Root" tabIcon="home"></ion-tab>
+    <ion-tab [root]="tab6Root" tabIcon="calendar"></ion-tab>
+    <ion-tab [root]="tab5Root" tabIcon="search"></ion-tab>
+    <ion-tab [root]="tab3Root" tabIcon="person"></ion-tab>
+</ion-tabs>

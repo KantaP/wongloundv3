@@ -1,0 +1,47 @@
+<!--
+  Generated template for the Login page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!--<ion-header>
+
+  <ion-navbar>
+    <ion-title>login</ion-title>
+  </ion-navbar>
+
+</ion-header>-->
+
+
+<ion-content padding class="bg">
+    <form [formGroup]="loginForm" novalidate>
+        <ion-grid>
+            <ion-row class="margin-top-50 justify-center align-center">
+                <img src="assets/logo.png" width="200" height="150" />
+            </ion-row>
+            <ion-row [ngClass]="{'margin-top-50 justify-center align-center': true , 'form-error': !loginForm.controls.email.valid && submitted}">
+                <ion-item>
+                    <ion-label fixed>อีเมล์:</ion-label>
+                    <ion-input type="email" formControlName="email"></ion-input>
+                </ion-item>
+            </ion-row>
+            <ion-row [ngClass]="{'margin-top-20 justify-center align-center': true , 'form-error': !loginForm.controls.password.valid && submitted}">
+                <ion-item>
+                    <ion-label fixed>รหัสผ่าน:</ion-label>
+                    <ion-input type="password" formControlName="password"></ion-input>
+                </ion-item>
+            </ion-row>
+            <ion-row class="margin-top-20 justify-center align-center">
+                <button ion-button block outline color="light" (click)="login()">เข้าสู่ระบบ</button>
+            </ion-row>
+            <ion-row class="margin-top-20 justify-center align-center">
+                <ion-col>
+                    <button ion-button block outline (click)="gotoRegister()" color="light" type="button"> ลงทะเบียน </button>
+                </ion-col>
+                <ion-col>
+                    <button ion-button block outline (click)="facebookRegister()" color="light" type="button"> ลงทะเบียน Facebook </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>

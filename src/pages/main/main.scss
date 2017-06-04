@@ -1,0 +1,10 @@
+page-main {
+    .item-custom {
+        color:#fff;
+        background-color:#000;
+        & button {
+            background: transparent;
+            font-size:1em;
+        }
+    }
+}
