@@ -6,7 +6,8 @@ import { ReportPage } from '../report/report'
 import { LoginPage } from '../login/login'
 import { StorageSession } from '../../providers/storage-session'
 import { Paramservice } from '../../providers/paramservice'
-import { Internal } from '../../providers/internal'
+import { External } from '../../providers/external'
+import { ContactPage } from '../contact/contact'
 /*
   Generated class for the Main page.
 
@@ -27,26 +28,53 @@ export class MainPage {
   private province;
   private provinces; 
   private reportPage;
-  constructor(public navCtrl: NavController, public navParams: NavParams , private _storage: StorageSession , public paramservice: Paramservice , public _internal: Internal) {
+  private contactPage;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams , private _storage: StorageSession , public paramservice: Paramservice , public _external: External) {
     this.rootPage = TabsPage;
     this.homePage = TabsPage;
     this.profilePage = ProfilePage
     this.reportPage = ReportPage
-    this.paramservice.paramsData = this.navParams.get('userProfile')
+    this.contactPage = ContactPage
+    
     if(this.paramservice.paramsData.type == 2) this.showCountView = true
     else this.showCountView = false
     this.provinces = []
     // console.log(this.navParams.get('userProfile'))
   }
 
+  showUserPicture() {
+    if(this.paramservice.paramsData.type == 1) {
+      return (this.paramservice.paramsData.profile_picture == '')? 'assets/icon/user.jpg' : this._external.loadImage(this.paramservice.paramsData.profile_picture)
+    }else{
+      return this._external.loadImage(this.paramservice.paramsData.shop_image_1) 
+    }
+  }
+
+  paramText() {
+    return JSON.stringify(this.paramservice.paramsData)
+  }
+
+  showUserName() {
+    if(this.paramservice.paramsData.type == 1) {
+      return this.paramservice.paramsData.firstname
+    }else{
+      return this.paramservice.paramsData.shop_name
+    }
+  } 
+
   ionViewDidLoad() {
-    this._internal.loadProvince()
+    this.paramservice.paramsData = this.navParams.get('userProfile') 
+    console.log(this.paramservice.paramsData)
+    this._external.findProvince()
     .subscribe(
       res => {
         var resJson = res.json()
-        this.provinces = resJson['th']['changwats']
+        this.provinces = resJson
       }
+      
     )
+
     this.paramservice.provinceSelected.subscribe((data)=>this.province = data)
   }
 
@@ -66,5 +94,9 @@ export class MainPage {
 
   goToReport() {
     this.navCtrl.push(ReportPage)
+  }
+
+  goToContact() {
+    this.navCtrl.push(ContactPage)
   }
 }

@@ -12,6 +12,21 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+@font-face {
+    font-family: 'rsu';
+    src: url('../assets/RSU_Regular.ttf') format('truetype'),
+         url('../assets/RSU_BOLD.ttf') format('truetype'),
+         url('../assets/RSU_light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body { 
+    font-family: 'rsu' !important;
+}
+
 $directions: center,
 flex-end,
 flex-start,
@@ -204,11 +219,17 @@ button {
     border-radius: 50%
 }
 
+.round-image-2 {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%
+}
+
 .font-color-default {
     color: #e6c12f;
 }
 
-.tab-button {
+.tab-button-custom {
     border:1px solid #e6c12f;
 }
 
@@ -284,3 +305,13 @@ ion-item {
     overflow-y: scroll;
     height: 300px;
 }
+
+ion-title {
+    text-align: center;
+}
+
+.toolbar-title-md {
+    margin-right: 15%;
+}
+
+

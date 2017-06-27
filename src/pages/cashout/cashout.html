@@ -11,7 +11,7 @@
           <ion-icon name='menu'></ion-icon>
         </button>
         <ion-title class="font-white-color">
-            วงเล่า
+            <img src="assets/logo.png" width="32" height="32" />
         </ion-title>
     </ion-navbar>
 
@@ -67,18 +67,18 @@
       </ion-grid>
     </ion-row>
     <ion-row>
-      <ion-col >
+      
        <ion-item style="border:0px !important">
-        <ion-label>แสดงในหน้าแรก (200 บาท/วัน)</ion-label>
+        <ion-label>แสดงในหน้าแรก (150 บาท/วัน)</ion-label>
         <ion-checkbox color="dark" checked="true" (ionChange)="homeChange($event)"></ion-checkbox>
        </ion-item>
-      </ion-col>
-      <ion-col>
+    </ion-row>
+    <ion-row>
         <ion-item style="border:0px !important">
-        <ion-label>แสดงในหน้าประเภท (150 บาท/วัน)</ion-label>
+        <ion-label>แสดงในหน้าประเภท (100 บาท/วัน)</ion-label>
         <ion-checkbox color="dark" checked="true" (ionChange)="typeChange($event)"></ion-checkbox>
         </ion-item>
-      </ion-col>
+
     </ion-row>
     <ion-row center>
       <ion-list inset style="width:100%;">
@@ -91,7 +91,16 @@
           <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" class="font-white-color" [(ngModel)]="endDate"></ion-datetime>
         </ion-item>
         <ion-item style="border:0px !important">
-          <button ion-button block outline color="light" (click)="goTopayment()">เข้าสู่หน้าจ่ายเงิน</button>
+          <ion-row>
+            <ion-col class="width-flex-50">
+              <button ion-button block outline color="light" (click)="goTopayment()">เข้าสู่หน้าจ่ายเงิน</button>
+            </ion-col>
+            <ion-col class="width-flex-50">
+              <button ion-button block outline color="light" (click)="goToHistory()">ประวัติการจ่ายเงิน</button>
+            </ion-col>
+          </ion-row>
+          
+          
         </ion-item>
       </ion-list>
     </ion-row>

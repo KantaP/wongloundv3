@@ -1,18 +1,20 @@
 import { Component , ElementRef , ViewChild} from '@angular/core';
-import { NavController, NavParams , ActionSheetController, ToastController ,  Platform, LoadingController, Loading , AlertController , ModalController} from 'ionic-angular';
+import { NavController, NavParams , ActionSheetController, ToastController ,  Platform, LoadingController , AlertController , ModalController} from 'ionic-angular';
 import { Paramservice } from '../../providers/paramservice'
 import { Internal } from '../../providers/internal'
 import { External } from '../../providers/external'
 import { ShopRecommended , ShopPromotion} from '../../models/request'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment'
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Transfer , TransferObject , FileUploadOptions } from '@ionic-native/transfer';
+import { Camera } from '@ionic-native/camera';
+import { Transfer , TransferObject } from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 import { API_URL } from '../../providers/settings'
 import { FullimagePage } from '../fullimage/fullimage'
+import { Slides } from 'ionic-angular';
 declare var google , cordova;
+
 /*
   Generated class for the ShopProfile page.
 
@@ -25,7 +27,7 @@ declare var google , cordova;
 })
 export class ShopProfilePage {
   @ViewChild('map') mapElement: ElementRef;
-
+  @ViewChild('profilePic') slides: Slides;
   map: any
   mapInitialised: boolean
   myLatLng: any
@@ -61,6 +63,8 @@ export class ShopProfilePage {
   favouriteIcon: string
   favouriteOn: boolean
   sliderOptions: any
+  promotionId: any
+  sliderObservable : any
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public _param: Paramservice , 
   private _internal: Internal , private _external: External , private _fb: FormBuilder , public actionSheetCtrl: ActionSheetController, 
@@ -70,7 +74,9 @@ export class ShopProfilePage {
     this.newPromotion = this._fb.group({
       promotion: ['' , [Validators.required]],
       description: ['' , [Validators.required]],
-      promotionId: [0]
+      promotionId: [0],
+      startDate: [this._moment().format('DD MMM YYYY') , [Validators.required]],
+      endDate: [this._moment().format('DD MMM YYYY') , [Validators.required]] 
     })
     this.api = API_URL
     this.profile = {}
@@ -87,6 +93,7 @@ export class ShopProfilePage {
     this.sliderOptions = {
        pager: true
     }
+    this.promotionId = 0
   }
 
   showFullImage(imgUrl: string) {
@@ -94,7 +101,20 @@ export class ShopProfilePage {
     modal.present();
   }
 
+  autoPlaySlider(){
+    var slider_index = this.slides.getActiveIndex();
+    if(slider_index < 10){
+        this.slides.slideTo(slider_index+1);
+    }
+    else{
+        this.slides.slideTo(0);
+    }
+  }
+
   ionViewDidLoad() {
+    // this.slides['autoplay'] = 3000
+    // this.slides2['autoplay']  = 3000
+    // this.slides.autoplay = 3000
     // console.log('ionViewDidLoad ShopProfilePage');
     this.editMode = false
     this.currentView = 'recommended'
@@ -107,27 +127,27 @@ export class ShopProfilePage {
         res => {
           var resJson = res.json()
           this.profile = resJson
-          for(let index = 1; index <= 10; index++) {
-            if(this.profile[`shop_image_${index}`] != "") this.profile[`shop_image_${index}`] = this.api + 'images/' + this.profile[`shop_image_${index}`]
-            else this.profile[`shop_image_${index}`] = 'assets/noimage.jpeg'
-          } 
+          // for(let index = 1; index <= 10; index++) {
+          //   if(this.profile[`shop_image_${index}`] != "") this.profile[`shop_image_${index}`] = this.api + 'images/' + this.profile[`shop_image_${index}`]
+          //   else this.profile[`shop_image_${index}`] = 'assets/noimage.jpeg'
+          // } 
           this.showSlide = true
         }
       )
       this._external.incrementCountView(this.shopId)
       .subscribe(
         res => {
-          var resJson = res.json()
+          // var resJson = res.json()
           // console.log(resJson)
         }
       )
     }else {
       this.profile = this._param.paramsData
       this.shopId = this.profile.shop_id
-      for(let index = 1; index <= 3; index++) {
-        if(this.profile[`shop_image_${index}`] != "") this.profile[`shop_image_${index}`] = this.api + 'images/' + this.profile[`shop_image_${index}`]
-        else this.profile[`shop_image_${index}`] = 'assets/noimage.jpeg'
-      } 
+      // for(let index = 1; index <= 3; index++) {
+      //   if(this.profile[`shop_image_${index}`] != "") this.profile[`shop_image_${index}`] = this.api + 'images/' + this.profile[`shop_image_${index}`]
+      //   // else this.profile[`shop_image_${index}`] = 'assets/noimage.jpeg'
+      // } 
       this.showSlide = true
     }
     
@@ -256,13 +276,35 @@ export class ShopProfilePage {
   }
 
   ionViewWillEnter(){
-    this._external.findPromotionByShop(this.shopId)
-    .subscribe(
-      res => {
-        var resJson = res.json()
-        this.promotions = resJson.data
-      }
-    )
+    
+    this.loadPromotion()
+    this.sliderObservable = setInterval(()=>{
+      this.autoPlaySlider()
+    },3000)
+  }
+
+  ionViewDidLeave() {
+    clearInterval(this.sliderObservable)
+  }
+
+  loadPromotion() {
+    if(this.mode == 'view') {
+      this._external.findPromotionByShop(this.shopId)
+      .subscribe(
+        res => {
+          var resJson = res.json()
+          this.promotions = resJson.data
+        }
+      )
+    }else {
+      this._external.findPromotionByShopAll(this.shopId)
+      .subscribe(
+        res => {
+          var resJson = res.json()
+          this.promotions = resJson.data
+        }
+      )
+    }
   }
 
   closePromotion(){
@@ -287,23 +329,25 @@ export class ShopProfilePage {
         });
       this.marker = marker
  
-      
-      this.map.addListener('click', (e) => {
-        var marker = new google.maps.Marker({
-          position: e.latLng,
-          map: this.map
+      if(this.mode == 'edit') {
+        this.map.addListener('click', (e) => {
+          var marker = new google.maps.Marker({
+            position: e.latLng,
+            map: this.map
+          });
+          this.myLatLng = e.latLng
+          if(this.marker !== null) {
+            this.marker.setMap(null)
+            this.marker = null
+            this.marker = marker
+          }else{
+            this.marker = marker
+          }
+          this.profile.latitude = this.myLatLng.lat()
+          this.profile.longitude = this.myLatLng.lng()
         });
-        this.myLatLng = e.latLng
-        if(this.marker !== null) {
-          this.marker.setMap(null)
-          this.marker = null
-          this.marker = marker
-        }else{
-          this.marker = marker
-        }
-        this.profile.latitude = this.myLatLng.lat()
-        this.profile.longitude = this.myLatLng.lng()
-      });
+      }
+      
     }catch(err) {
       setTimeout(()=>this.initMap , 1000)
     }
@@ -336,11 +380,18 @@ export class ShopProfilePage {
 
   showFormAddPro(){
     this.createNewPro = true
+    this.updatePromotion = false
+    this.promotionId = 0
+    this.newPromotion.reset()
+    // this.promotionImage = "assets/noimage.jpeg"
   }
 
   hideFormAddPro() {
     this.createNewPro = false
     this.updatePromotion = false
+    this.promotionId = 0
+    this.promotionImage = "assets/noimage.jpeg"
+    this.newPromotion.reset()
   }
 
   showPromotionDetail(promotionIndex: number , readOnly: boolean = false) {
@@ -349,8 +400,11 @@ export class ShopProfilePage {
     this.newPromotion.patchValue({
       promotion: this.promotions[promotionIndex].promotion,
       description: this.promotions[promotionIndex].description,
-      promotionId: this.promotions[promotionIndex].promotion_id
+      promotionId: this.promotions[promotionIndex].promotion_id,
+      startDate: this._moment(this.promotions[promotionIndex].date_start,'YYYY-MM-DD').format('DD MMM YYYY') ,
+      endDate: this._moment(this.promotions[promotionIndex].date_end,'YYYY-MM-DD').format('DD MMM YYYY')  ,
     })
+    this.promotionId = this.promotions[promotionIndex].promotion_id
     this.promotionImage = this.promotions[promotionIndex].image_promotion || 'assets/noimage.jpeg'
   }
   
@@ -384,7 +438,9 @@ export class ShopProfilePage {
       promotion: this.newPromotion.controls['promotion'].value,
       description: this.newPromotion.controls['description'].value,
       shop_id: this.profile.shop_id,
-      promotion_id: 0
+      promotion_id: 0,
+      date_start: this.newPromotion.controls['startDate'].value,
+      date_end: this.newPromotion.controls['endDate'].value,
     })
     .subscribe(
       res => {
@@ -394,13 +450,7 @@ export class ShopProfilePage {
         this.loading.dismissAll()
         if(resJson['result_number'] == 1) {
           this.alert('เพิ่มโปรโมชั่นสำเร็จ')
-          this._external.findPromotionByShop(this.profile.shop_id)
-          .subscribe(
-            res => {
-              var resJson = res.json()
-              this.promotions = resJson.data
-            }
-          )
+          this.loadPromotion()
         }
       }
     )
@@ -428,7 +478,9 @@ export class ShopProfilePage {
       params : {
         promotion: this.newPromotion.controls['promotion'].value,
         description: this.newPromotion.controls['description'].value,
-        shop_id: this.profile.shop_id
+        shop_id: this.profile.shop_id,
+        date_start: this.newPromotion.controls['startDate'].value,
+        date_end: this.newPromotion.controls['endDate'].value,
       }
     };
 
@@ -445,13 +497,7 @@ export class ShopProfilePage {
     fileTransfer.upload(targetPath, url, options).then(()=>{
       this.loading.dismissAll()
       this.alert('เพิ่มโปรโมชั่นสำเร็จ')
-      this._external.findPromotionByShop(this.profile.shop_id)
-        .subscribe(
-          res => {
-            var resJson = res.json()
-           this.promotions = resJson.data
-           }
-        )
+      this.loadPromotion()
     },err => {
       this.loading.dismissAll()
       this.presentToast('Error while uploading file.');
@@ -472,7 +518,9 @@ export class ShopProfilePage {
       promotion: this.newPromotion.controls['promotion'].value,
       description: this.newPromotion.controls['description'].value,
       shop_id: this.profile.shop_id,
-      promotion_id: this.newPromotion.controls['promotionId'].value
+      promotion_id: this.newPromotion.controls['promotionId'].value,
+      date_start: this.newPromotion.controls['startDate'].value,
+      date_end: this.newPromotion.controls['endDate'].value,
     })
     .subscribe(
       res => {
@@ -487,11 +535,55 @@ export class ShopProfilePage {
             res => {
               var resJson = res.json()
               this.promotions = resJson.data
+              this.newPromotion.reset()
             }
           )
         }
       }
     )
+  }
+
+  deletePromotion(proId) {
+    let alert = this._alert.create({
+      title: 'แจ้งเตือน',
+      message: 'คุณต้องการลบโปรโมชั่นนี้ ?',
+      buttons: [
+        {
+          text: 'ตกลง',
+          handler: () => {
+            this._external.deletePromotion(this.promotionId, this.profile.shop_id)
+            .subscribe(
+              res => {
+                var resJson = res.json()
+                if(resJson['status']) {
+                  this.loadPromotion()
+                  this.hideFormAddPro()
+                }else{
+                  let alert = this._alert.create({
+                    title: 'แจ้งเตือน',
+                    message: 'ลบโปรโมชั่นๆไม่สำเร็จ',
+                    buttons: [
+                      {
+                        text: 'ตกลง',
+                        handler: ()=> {
+
+                        }
+                      }
+                    ]
+                  })
+                }
+              }
+            )
+          }
+        },
+        {
+          text: 'ยกเลิก',
+          handler: () => {
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   editPromotionWithImage(){
@@ -517,7 +609,9 @@ export class ShopProfilePage {
         promotion: this.newPromotion.controls['promotion'].value,
         description: this.newPromotion.controls['description'].value,
         shop_id: this.profile.shop_id,
-        promotion_id: this.newPromotion.controls['promotionId'].value
+        promotion_id: this.newPromotion.controls['promotionId'].value,
+        date_start: this.newPromotion.controls['startDate'].value,
+        date_end: this.newPromotion.controls['endDate'].value,
       }
     };
 
@@ -538,7 +632,8 @@ export class ShopProfilePage {
         .subscribe(
           res => {
             var resJson = res.json()
-           this.promotions = resJson.data
+            this.promotions = resJson.data
+            this.newPromotion.reset()
            }
         )
     },err => {
@@ -581,8 +676,20 @@ export class ShopProfilePage {
     // Use the FileTransfer to upload the image
     fileTransfer.upload(targetPath, url, options).then(()=>{
       this.loading.dismissAll()
-      this._param.paramsData = this.profile
-      this._param.updateProfile()
+      
+      this._external.getShopProfile(this.shopId)
+      .subscribe(
+        res => {
+          var resJson = res.json()
+          this.profile = resJson
+          this._param.paramsData = this.profile
+          this._param.updateProfile()
+          this.showSlide = true
+        }
+      )
+      
+
+      this.newPromotion.reset()
     },err => {
       this.loading.dismissAll()
       this.presentToast('Error while uploading file.');

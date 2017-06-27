@@ -76,12 +76,23 @@ export class CashoutPage {
       return text;
   }
 
+  goToHistory() {
+    const browser = this.iab.create('http://128.199.210.96/stat/payment.php?shop_id='+this.param.paramsData.shop_id)
+    browser.show()
+  }
+
   goTopayment() {
     // calculate price 
     // for test use 1 baht 
+    if(this.positionSelect.length == 0) {
+      return false;
+    }
+    if(!this.startDate) return false
+    if(!this.endDate) return false
+    if(!this.homeChecked && !this.typeChecked) return false
     var paylink = {}
-    var price_home = 1
-    var price_type = 1
+    var price_home = 150
+    var price_type = 100
 
     var total_price = 0
     var position = ""
@@ -137,7 +148,7 @@ export class CashoutPage {
                 alert.present();
               }else {
                 attempt++ 
-                if(attempt == 10) {
+                if(attempt == 5) {
                   let alert = this.alertCtrl.create({
                     title: 'แจ้งเตือน',
                     message: 'ยกเลิกการสั่งซื้อ',
@@ -156,7 +167,7 @@ export class CashoutPage {
               }
             }
           )
-        },1000)
+        },200)
       }
     )
   }

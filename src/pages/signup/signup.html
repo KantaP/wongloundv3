@@ -6,11 +6,16 @@
 -->
 
 <ion-header>
-    <ion-navbar>
-        <!--<ion-title>
-            Register
-        </ion-title>-->
+
+  <ion-navbar>
+        <button ion-button menuToggle icon-only>
+          <ion-icon name='menu'></ion-icon>
+        </button>
+        <ion-title class="font-white-color">
+            <img src="assets/logo.png" width="32" height="32" />
+        </ion-title>
     </ion-navbar>
+
 </ion-header>
 
 <ion-content padding class="bg">
@@ -21,8 +26,8 @@
             </ion-row>
             <ion-row [ngClass]="{'margin-top-50 justify-center align-center': true , 'form-error': !user.controls.email.valid && submitted}">
                 <ion-item>
-                    <ion-label fixed>อีเมล์: </ion-label>
-                    <ion-input type="email" formControlName="email"></ion-input>
+                    <ion-label fixed>ชื่อผู้ใช้: </ion-label>
+                    <ion-input type="text" formControlName="email"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.password.valid && submitted}">

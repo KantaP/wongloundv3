@@ -67,5 +67,7 @@ export interface ShopPromotion {
     promotion: string;
     description?: string;
     promotion_id: number;
-    shop_id: number
+    shop_id: number;
+    date_start: string;
+    date_end: string;
 }

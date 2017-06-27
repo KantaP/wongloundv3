@@ -76,10 +76,24 @@ export class SignupPage {
     .subscribe(
       res => {
         var resJson = res.json()
-        if(resJson.data !== null) {
+        if(resJson.hasOwnProperty('data')) {
           let alert = this._alert.create({
             title: 'แจ้งเตือน',
             message: 'สมัครสมาชิกสำเร็จ',
+            buttons: [
+              {
+                text: 'ตกลง',
+                handler: () => {
+                  this.navCtrl.setRoot(LoginPage)
+                }
+              }
+            ]
+          });
+          alert.present();
+        }else{
+          let alert = this._alert.create({
+            title: 'แจ้งเตือน',
+            message: resJson.err,
             buttons: [
               {
                 text: 'ตกลง',

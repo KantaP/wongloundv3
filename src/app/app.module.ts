@@ -6,7 +6,7 @@ import { MyApp } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 // import { AboutPage } from '../pages/about/about';
-// import { ContactPage } from '../pages/contact/contact';
+import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { MainPage } from '../pages/main/main';
@@ -33,11 +33,13 @@ import { EmailComposer } from '@ionic-native/email-composer';
 import { Transfer } from '@ionic-native/transfer'
 import { FullimagePage } from '../pages/fullimage/fullimage'
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { StatusBar } from '@ionic-native/status-bar'
+import { SplashScreen } from '@ionic-native/splash-screen'
 @NgModule({
   declarations: [
     MyApp,
     // AboutPage,
-    // ContactPage,
+    ContactPage,
     HomePage,
     TabsPage,
     LoginPage,
@@ -64,7 +66,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
   entryComponents: [
     MyApp,
     // AboutPage,
-    // ContactPage,
+    ContactPage,
     HomePage,
     TabsPage,
     LoginPage,
@@ -82,6 +84,6 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler} , Internal , 
   External , StorageSession , Paramservice,Camera  ,Facebook , Geolocation , FilePath , File , 
-  EmailComposer, Transfer , InAppBrowser]
+  EmailComposer, Transfer , InAppBrowser , StatusBar , SplashScreen]
 })
 export class AppModule {}

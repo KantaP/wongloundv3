@@ -5,14 +5,16 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar>
+
+  <ion-navbar>
         <button ion-button menuToggle icon-only>
           <ion-icon name='menu'></ion-icon>
         </button>
         <ion-title class="font-white-color">
-            วงเล่า
+            <img src="assets/logo.png" width="32" height="32" />
         </ion-title>
     </ion-navbar>
+
 </ion-header>
 
 
@@ -25,68 +27,68 @@
             <div style="position:absolute;top:50px;right:25px;z-index:1000;" *ngIf="mode == 'view' && userType == 1 && checkRegisterActivity" (click)="toggleActivity()">
                 <ion-icon name="hand" [ios]="activityIcon" [md]="activityIcon" style="color:#e6c12f;font-size:2em;"></ion-icon>
             </div>
-            <ion-slides pager style="max-height:200px;" *ngIf="mode == 'edit'">
+            <ion-slides #profilePic  pager style="max-height:200px;" *ngIf="mode == 'edit'">
                 <ion-slide (click)="presentActionSheet(1)">
-                    <img [src]="profile.shop_image_1" >
+                    <img [src]="_external.loadImage(profile.shop_image_1)" >
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(2)">
-                    <img [src]="profile.shop_image_2">
+                    <img [src]="_external.loadImage(profile.shop_image_2)">
                 </ion-slide>
                  <ion-slide (click)="presentActionSheet(3)">
-                    <img [src]="profile.shop_image_3">
+                    <img [src]="_external.loadImage(profile.shop_image_3)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(4)">
-                    <img [src]="profile.shop_image_4">
+                    <img [src]="_external.loadImage(profile.shop_image_4)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(5)">
-                    <img [src]="profile.shop_image_5">
+                    <img [src]="_external.loadImage(profile.shop_image_5)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(6)">
-                    <img [src]="profile.shop_image_6">
+                    <img [src]="_external.loadImage(profile.shop_image_6)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(7)">
-                    <img [src]="profile.shop_image_7">
+                    <img [src]="_external.loadImage(profile.shop_image_7)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(8)">
-                    <img [src]="profile.shop_image_8">
+                    <img [src]="_external.loadImage(profile.shop_image_8)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(9)">
-                    <img [src]="profile.shop_image_9">
+                    <img [src]="_external.loadImage(profile.shop_image_9)">
                 </ion-slide>
                 <ion-slide (click)="presentActionSheet(10)">
-                    <img [src]="profile.shop_image_10">
+                    <img [src]="_external.loadImage(profile.shop_image_10)">
                 </ion-slide>
             </ion-slides>
-            <ion-slides pager style="max-height:200px;" *ngIf="mode == 'view' && showSlide">
-                <ion-slide (click)="showFullImage(profile.shop_image_1)">
-                    <img [src]="profile.shop_image_1" >
+            <ion-slides #profilePic   pager style="max-height:200px;" *ngIf="mode == 'view' && showSlide">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_1))">
+                    <img [src]="_external.loadImage(profile.shop_image_1)" >
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_2)">
-                    <img [src]="profile.shop_image_2">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_2))">
+                    <img [src]="_external.loadImage(profile.shop_image_2)">
                 </ion-slide>
-                 <ion-slide (click)="showFullImage(profile.shop_image_3)">
-                    <img [src]="profile.shop_image_3">
+                 <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_3))">
+                    <img [src]="_external.loadImage(profile.shop_image_3)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_4)">
-                    <img [src]="profile.shop_image_4">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_4))">
+                    <img [src]="_external.loadImage(profile.shop_image_4)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_5)">
-                    <img [src]="profile.shop_image_5">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_5))">
+                    <img [src]="_external.loadImage(profile.shop_image_5)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_6)">
-                    <img [src]="profile.shop_image_6">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_6))">
+                    <img [src]="_external.loadImage(profile.shop_image_6)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_7)">
-                    <img [src]="profile.shop_image_7">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_7))">
+                    <img [src]="_external.loadImage(profile.shop_image_7)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_8)">
-                    <img [src]="profile.shop_image_8">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_8))">
+                    <img [src]="_external.loadImage(profile.shop_image_8)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_9)">
-                    <img [src]="profile.shop_image_9">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_9))">
+                    <img [src]="_external.loadImage(profile.shop_image_9)">
                 </ion-slide>
-                <ion-slide (click)="showFullImage(profile.shop_image_10)">
-                    <img [src]="profile.shop_image_10">
+                <ion-slide (click)="showFullImage(_external.loadImage(profile.shop_image_10))">
+                    <img [src]="_external.loadImage(profile.shop_image_10)">
                 </ion-slide>
             </ion-slides>
         </ion-row>
@@ -99,26 +101,28 @@
                 <input type="text" *ngIf="editMode" />
             </ion-col>
         </ion-row>-->
-        <ion-row class="justify-flex-start"> 
+        <ion-row class="justify-flex-start margin-top-10" style="border: 1px solid #e6c12f !important; border-radius: 5px;"> 
             <ion-col>
                  <span style="font-weight:bold;color:#e6c12f;">เวลาทำการ {{_moment(profile.open_time,'HH:mm:ss').format('HH:mm')}} - {{_moment(profile.close_time,'HH:mm:ss').format('HH:mm')}}</span>
             </ion-col>
+        </ion-row>
+        <ion-row class="justify-flex-start margin-top-10" style="border: 1px solid #e6c12f !important; border-radius: 5px;"> 
             <ion-col>
-                 <span style="font-weight:bold;color:#e6c12f;position:relative;top:2px;">tel: <a href="tel: {{profile.phone_number}}">{{profile.phone_number}}</a></span>
+                 <span style="font-weight:bold;color:#e6c12f;position:relative;top:2px;"><ion-icon name="call" item-left style="color:#fff;"></ion-icon>
+                 <a href="tel: {{profile.phone_number}}">{{profile.phone_number}}</a></span>
             </ion-col>
         </ion-row>
-
-        <ion-row>
-            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'recommended'}">
+        <ion-row class="margin-top-10">
+            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'recommended' , 'custom-border': true}">
                 <button block ion-button clear (click)="toggleView('recommended')">แนะนำร้าน</button>
             </ion-col>
-            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'promotion'}">
+            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'promotion' , 'custom-border': true}">
                 <button block ion-button clear (click)="toggleView('promotion')">โปรโมชั่น</button>
             </ion-col>
-            <ion-col *ngIf="mode == 'view'" [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'map'}">
+            <ion-col *ngIf="mode == 'view'" [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'map' , 'custom-border': true}">
                 <button block ion-button clear (click)="toggleView('map')">แผนที่</button>
             </ion-col>
-            <ion-col *ngIf="mode == 'edit'" [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'profile'}">
+            <ion-col *ngIf="mode == 'edit'" [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'profile' , 'custom-border': true}">
                 <button block ion-button clear (click)="toggleView('profile')">ข้อมูลส่วนตัว</button>
             </ion-col>
         </ion-row>
@@ -135,7 +139,7 @@
                             <img [src]="item.image_promotion">
                         </ion-avatar>
                         <h2>{{item.promotion}}</h2>
-                        <h3>วันที่สร้าง: {{_moment(item.date_insert, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY HH:mm')}}</h3>
+                        <!--<h3 *ngIf="currentView == 'promotion' && !readOnly">วันที่สร้าง: {{_moment(item.date_insert, 'YYYY-MM-DD HH:mm:ss').format('DD-MM-YYYY HH:mm')}}</h3>-->
                         <ion-icon item-right name="arrow-forward" class="font-white-color"></ion-icon>
                         <!--<p>{{item.description}}</p>-->
                     </ion-item>
@@ -154,18 +158,36 @@
                         
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <ion-label fixed>ชื่อโปรโมชั่น</ion-label>
-                                <ion-input type="text" formControlName="promotion"></ion-input>
+                                <!--<ion-label fixed>ชื่อโปรโมชั่น</ion-label>-->
+                                <ion-input type="text" formControlName="promotion" readonly></ion-input>
+                                <!--<div class="font-white-color">{{newPromotion.controls.promotion.value}}</div>-->
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <ion-label fixed>รายละเอียด</ion-label>
-                                <ion-textarea class="font-white-color height-5x-50-px" formControlName="description"></ion-textarea>
+                                <!--<ion-label fixed>รายละเอียด</ion-label>-->
+                                <ion-textarea class="font-white-color height-5x-50-px" formControlName="description" readonly></ion-textarea>
+                                <!--<div class="font-white-color">{{newPromotion.controls.description.value}}</div>-->
                             </ion-item>
                         </ion-row>
+                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
+                             <ion-item>
+                                <ion-label fixed>วันที่เริ่ม</ion-label>
+                                <ion-input type="text" formControlName="startDate" readonly></ion-input>
+                                <!--<ion-textarea class="font-white-color height-5x-50-px" formControlName="description"></ion-textarea>-->
+                                <!--<div class="font-white-color">{{_moment(newPromotion.controls.startDate.value,'YYYY-MM-DD').format('DD MMM YYYY')}}</div>-->
+                            </ion-item>
+                         </ion-row>
+                          <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
+                              <ion-item>
+                                <ion-label fixed>วันที่สิ้นสุด</ion-label>
+                                <ion-input type="text" formControlName="endDate" readonly></ion-input>
+                                <!--<ion-textarea class="font-white-color height-5x-50-px" formControlName="description"></ion-textarea>-->
+                                <!--<div class="font-white-color">{{_moment(newPromotion.controls.endDate.value,'YYYY-MM-DD').format('DD MMM YYYY')}}</div>-->
+                            </ion-item>
+                          </ion-row>
                         <ion-row style="max-height:200px;" class="margin-top-10">
-                            <img [src]="promotionImage" height="200">
+                            <img [src]="promotionImage" height="200" style="width:100%;">
                         </ion-row>
                     </form>
                 </ion-grid>
@@ -214,24 +236,36 @@
                         
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <ion-label fixed>ชื่อโปรโมชั่น</ion-label>
-                                <ion-input type="text" formControlName="promotion"></ion-input>
+                                <!--<ion-label fixed>ชื่อโปรโมชั่น</ion-label>-->
+                                <ion-input type="text" formControlName="promotion" placeholder="ชื่อโปรโมชั่น"></ion-input>
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <ion-label fixed>รายละเอียด</ion-label>
-                                <ion-textarea class="font-white-color height-5x-50-px" formControlName="description"></ion-textarea>
+                                <!--<ion-label fixed>รายละเอียด</ion-label>-->
+                                <ion-textarea class="font-white-color height-5x-50-px" formControlName="description" placeholder="รายละเอียด"></ion-textarea>
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
-                            <ion-col class="width-flex-50">
+                            <ion-item>
+                                <ion-label fixed>วันที่เริ่ม</ion-label>
+                                <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" class="font-white-color" formControlName="startDate"></ion-datetime>
+                            </ion-item>
+                        </ion-row>
+                        <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
+                            <ion-item>
+                                <ion-label fixed>วันที่สิ้นสุด</ion-label>
+                                <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" class="font-white-color" formControlName="endDate"></ion-datetime>
+                            </ion-item>
+                        </ion-row>
+                        <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
+                            <ion-col class="width-flex-33">
                                 <button ion-button block icon-left outline color="light" type="button" (click)="(createNewPro) ? presentActionSheet() : presentActionSheet(4)">
                                     <ion-icon name="add"></ion-icon>
                                     เพิ่มรูปภาพ
                                 </button>
                             </ion-col>
-                            <ion-col class="width-flex-50">
+                            <ion-col class="width-flex-33">
                                 <button *ngIf="createNewPro" ion-button block outline color="light" type="button" (click)="(this.promotionImage == '') ? createPromotion() : createPromotionWithImage()">
                                     บันทึก 
                                 </button>
@@ -239,9 +273,14 @@
                                     อัพเดตข้อมูล
                                 </button>
                             </ion-col> 
+                            <ion-col class="width-flex-33">
+                                <button *ngIf="updatePromotion" ion-button block outline color="light" type="button" (click)="deletePromotion()">
+                                    ลบโปรโมชั่น 
+                                </button>
+                            </ion-col>
                         </ion-row>
                         <ion-row style="max-height:200px;">
-                            <img [src]="promotionImage || 'assets/noimage.jpeg'" height="200">
+                            <img [src]="promotionImage || 'assets/noimage.jpeg'" height="200" style="width:100%;">
                         </ion-row>
                     </form>
                 </ion-grid>
@@ -249,65 +288,65 @@
             <ion-grid *ngIf="currentView == 'profile'">
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <ion-label fixed>อีเมล์: </ion-label>
-                        <ion-input type="email" [(ngModel)]="profile.email"></ion-input>
+                        <!--<ion-label fixed>ชื่อผู้ใช้: </ion-label>-->
+                        <ion-input type="text" [(ngModel)]="profile.email" placeholder="ชื่อผู้ใช้"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <ion-label fixed>ชื่อร้าน</ion-label>
-                        <ion-input type="text" [(ngModel)]="profile.shop_name"></ion-input>
+                        <!--<ion-label fixed>ชื่อร้าน</ion-label>-->
+                        <ion-input type="text" [(ngModel)]="profile.shop_name" placeholder="ชื่อร้าน"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <ion-label fixed>ชื่อ (ผู้ติดต่อ)</ion-label>
-                        <ion-input type="text" [(ngModel)]="profile.firstname"></ion-input>
+                        <!--<ion-label fixed>ชื่อ (ผู้ติดต่อ)</ion-label>-->
+                        <ion-input type="text" [(ngModel)]="profile.firstname" placeholder="ชื่อ (ผู้ติดต่อ)"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <ion-label fixed>นามสกุล</ion-label>
-                        <ion-input type="text" [(ngModel)]="profile.surname"></ion-input>
+                        <!--<ion-label fixed>นามสกุล</ion-label>-->
+                        <ion-input type="text" [(ngModel)]="profile.surname" placeholder="นามสกุล"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <ion-label fixed>เบอร์โทร</ion-label>
-                        <ion-input type="tel" [(ngModel)]="profile.phone_number"></ion-input>
+                        <!--<ion-label fixed>เบอร์โทร</ion-label>-->
+                        <ion-input type="tel" [(ngModel)]="profile.phone_number" placeholder="เบอร์โทรศัพท์"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <ion-label fixed>ที่อยู่</ion-label>
-                        <ion-textarea class="font-white-color height-5x-50-px" [(ngModel)]="profile.address"></ion-textarea>
+                        <!--<ion-label fixed>ที่อยู่</ion-label>-->
+                        <ion-textarea class="font-white-color height-5x-50-px" [(ngModel)]="profile.address" placeholder="ที่อยู่"></ion-textarea>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <ion-label fixed>ตำบล</ion-label>
-                        <ion-input type="text" [(ngModel)]="profile.sub_district"></ion-input>
+                        <!--<ion-label fixed>ตำบล</ion-label>-->
+                        <ion-input type="text" [(ngModel)]="profile.sub_district" placeholder="ตำบล"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <ion-label fixed>อำเภอ</ion-label>
-                        <ion-input type="text" [(ngModel)]="profile.district"></ion-input>
+                        <!--<ion-label fixed>อำเภอ</ion-label>-->
+                        <ion-input type="text" [(ngModel)]="profile.district" placeholder="อำเภอ"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
                         <ion-label fixed>จังหวัด</ion-label>
                         <ion-select [(ngModel)]="profile.province" class="font-white-color">
-                            <!--<ion-option value="">กรุณาเลือกจังหวัด</ion-option>-->
+                            <!--<ion-option value="">จังหวัด</ion-option>-->
                             <ion-option *ngFor="let province of provinces" [value]="province.name">{{province.name}}</ion-option>
                         </ion-select>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <ion-label fixed>ไปรษณีย์</ion-label>
-                        <ion-input type="tel" [(ngModel)]="profile.postal_code"></ion-input>
+                        <!--<ion-label fixed>ไปรษณีย์</ion-label>-->
+                        <ion-input type="tel" [(ngModel)]="profile.postal_code" placeholder="ไปรษณีย์"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
@@ -324,11 +363,12 @@
                         </ion-item>-->
 
                         <ion-select [(ngModel)]="profile.shop_type" class="font-white-color"> 
-                            <ion-option value="1">ชิว(ร้านเล็ก-ใหญ่&มิคต่ำกว่า29)</ion-option>
-                            <ion-option value="2">Bar&Bistro(ขนาดกลาง-ใหญ่&มิค 30+)</ion-option>
-                            <ion-option value="3">ผับ (ผับ)</ion-option>
-                            <ion-option value="4">20+(มีผู้หญิงนั้งดื่ม)</ion-option>
-                            <ion-option value="5">เพื่อชีวิต(เพื่อชีวิต&ลูกทุ่ง)</ion-option>
+                            <!--<ion-option value="">ประเภทร้าน</ion-option>-->
+                            <ion-option value="1">เล่าสบาย</ion-option>
+                            <ion-option value="2">เล่าหรู</ion-option>
+                            <ion-option value="3">เล่าไม่รู้เรื่อง</ion-option>
+                            <ion-option value="4">เล่าไม่ได้</ion-option>
+                            <ion-option value="5">เล่ากันเอง</ion-option>
                         </ion-select>
                     </ion-item>
                 </ion-row>

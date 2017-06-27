@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams , ActionSheetController, ToastController ,  Platform, LoadingController, Loading } from 'ionic-angular';
+import { NavController, NavParams , ActionSheetController, ToastController ,  
+  Platform, LoadingController , AlertController , ModalController } from 'ionic-angular';
 import { StorageSession } from '../../providers/storage-session'
 import { UpdateUser } from '../../models/request'
 import { External } from '../../providers/external'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Transfer , TransferObject , FileUploadOptions } from '@ionic-native/transfer';
+import { FullimagePage } from '../fullimage/fullimage'
+import { Camera } from '@ionic-native/camera';
+import { Transfer , TransferObject } from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
 
@@ -34,12 +35,13 @@ export class ProfilePage {
   imageProfile: any
   changeImage: boolean
   imageName: any
+  showChangePassword: boolean
 
   constructor(public navCtrl: NavController, public navParams: NavParams , private _storage : StorageSession , private _external: External , private _fb: FormBuilder ,
   public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController,
    public platform: Platform, public loadingCtrl: LoadingController ,
     public _param: Paramservice , public camera: Camera , public filePath: FilePath
-    ,public file: File , public transfer: Transfer) {
+    ,public file: File , public transfer: Transfer , public alertCtrl: AlertController, public modalCtrl: ModalController) {
     // this.userProfile = {
     //   firstname: '',
     //   surname: '',
@@ -47,34 +49,122 @@ export class ProfilePage {
     //   phone_number: '',
     //   email: ''
     // }
+    this.profileGroup = this._fb.group({
+      firstname: [this._param.paramsData.firstname , [Validators.required]],
+      // surname: [this._param.paramsData.surname , [Validators.required]] ,
+      sex: [this._param.paramsData.sex , [Validators.required]],
+      phone_number: [this._param.paramsData.phone_number , [Validators.required]],
+      email: [this._param.paramsData.email , [Validators.required]],
+      oldPassword: [''],
+      newPassword: [''],
+      repeatNewPassword: ['']
+    })
+  }
+
+  ionViewWillEnter(){
     this.editMode = false
     this.lastImage = ""
     this.userId = 0
     this.imageProfile = ""
     this.imageName = ""
-    this.profileGroup = this._fb.group({
-      firstname: [this._param.paramsData.firstname , [Validators.required]],
-      surname: [this._param.paramsData.surname , [Validators.required]] ,
-      sex: [this._param.paramsData.sex , [Validators.required]],
-      phone_number: [this._param.paramsData.phone_number , [Validators.required]],
-      email: [this._param.paramsData.email , [Validators.required]]
-    })
+    this.showChangePassword = false
     this.changeImage = false
+    this.initialUser()
+  }
+
+  initialUser() {
     this.userId = this._param.paramsData.user_id
     this.imageName = this._param.paramsData.profile_picture
     this.imageProfile = (this._param.paramsData.profile_picture == '') ? 'assets/icon/user.jpg' : API_URL + 'images/' + this._param.paramsData.profile_picture
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
+
+  }
+
+  getProfile() {
+    this._external.getUserProfile(this.userId)
+    .subscribe(
+      res => {
+        var resJson = res.json()
+        this._param.paramsData = resJson['profile']
+        this._param.updateProfile()
+        this.initialUser()
+      }
+    )
+  }
+
+  showFullImage(imgUrl: string) {
+    let modal = this.modalCtrl.create(FullimagePage, {imgUrl})
+    modal.present();
+  }
+
+  alert(message) {
+    let alert = this.alertCtrl.create({
+      title: 'แจ้งเตือน',
+      message: message,
+      buttons: [
+        {
+          text: 'ตกลง',
+          handler: () => {
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  toggleChangePassword() {
+    if(this.showChangePassword) {
+      var { oldPassword , newPassword , repeatNewPassword } = this.profileGroup.controls
+      if(newPassword.value != repeatNewPassword.value) {
+        this.alert('กรุณาใส่รหัสผานใหม่ให้เหมือนกันทั้งหมด')
+        return false
+      }
+      if(newPassword.value == '' && repeatNewPassword.value == '') {
+        this.showChangePassword = false
+        return false
+      }
+      var changeReq = { 
+        user_id : this.userId,
+        type: this._param.paramsData.type,
+        old_password: oldPassword.value,
+        new_password: newPassword.value
+      }
+      this.loading = this.loadingCtrl.create({
+        content: 'กำลังอัพเตดข้อมุล...',
+      });
+      this.loading.present();
+      this._external.changePassword(changeReq)
+      .subscribe(
+        res => {
+          var resJson = res.json()
+          this.showChangePassword = false
+          this.loading.dismiss()
+          if(resJson['status']) {
+            this.alert('เปลี่ยนรหัสผ่านสำเร็จ')
+          }else {
+            this.alert('เปลี่ยนรหัสผ่านไม่สำเร็จ กรุณาติดต่อผู้ดูแล')
+          }
+          // this.profileGroup.reset()
+        }
+      )
+
+    }else{
+      this.showChangePassword = !this.showChangePassword
+    }
+
   }
 
   updateProfile() {
-
+    this.loading = this.loadingCtrl.create({
+      content: 'กำลังอัพเตดข้อมุล...',
+    });
+    this.loading.present();
     // if(confirm('คุณต้องการอัพเดตข้อมูลใหม่หรือไหม ?')){
       var profileRequest: UpdateUser = {
         firstname: this.profileGroup.controls['firstname'].value,
-        surname: this.profileGroup.controls['surname'].value,
+        // surname: this.profileGroup.controls['surname'].value,
         sex: this.profileGroup.controls['sex'].value,
         phone_number: this.profileGroup.controls['phone_number'].value,
         email: this.profileGroup.controls['email'].value,
@@ -84,14 +174,17 @@ export class ProfilePage {
       this._external.updateProfile(profileRequest)
       .subscribe(
         res => {
-          var resJson = res.json()
-          this.presentToast(resJson['updateUser'])
-          this._param.paramsData['firstname'] = this.profileGroup.controls['firstname'].value
-          this._param.paramsData['surname'] = this.profileGroup.controls['surname'].value
-          this._param.paramsData['sex'] = this.profileGroup.controls['sex'].value
-          this._param.paramsData['phone_number'] = this.profileGroup.controls['phone_number'].value
-          this._param.paramsData['email'] = this.profileGroup.controls['email'].value
-          this._param.paramsData['profile_picture'] = this.imageName
+          // var resJson = res.json()
+          this.loading.dismissAll();
+          this.alert('อัพเดตข้อมูลสำเร็จ')
+          // this._param.paramsData['firstname'] = this.profileGroup.controls['firstname'].value
+          // this._param.paramsData['surname'] = this.profileGroup.controls['surname'].value
+          // this._param.paramsData['sex'] = this.profileGroup.controls['sex'].value
+          // this._param.paramsData['phone_number'] = this.profileGroup.controls['phone_number'].value
+          // this._param.paramsData['email'] = this.profileGroup.controls['email'].value
+          // this._param.paramsData['profile_picture'] = this.imageName
+          this.getProfile()
+          // this.profileGroup.reset()
           //   this._storage.set('userProfile' , data)
           // this._storage.get('userProfile')
           // .then((data)=>{
@@ -142,7 +235,7 @@ export class ProfilePage {
       sourceType: sourceType,
       saveToPhotoAlbum: false,
       correctOrientation: true,
-      encodingType: this.camera.EncodingType.JPEG,
+      encodingType: this.camera.EncodingType.PNG,
       targetWidth: 160,
       targetHeight: 160,
     };
@@ -230,7 +323,7 @@ private createFileName() {
       mimeType: "multipart/form-data",
       params : {
         firstname: this.profileGroup.controls['firstname'].value,
-        surname: this.profileGroup.controls['surname'].value,
+        // surname: this.profileGroup.controls['surname'].value,
         sex: this.profileGroup.controls['sex'].value,
         phone_number: this.profileGroup.controls['phone_number'].value,
         email: this.profileGroup.controls['email'].value,
@@ -249,12 +342,14 @@ private createFileName() {
     // Use the FileTransfer to upload the image
     fileTransfer.upload(targetPath, url, options).then(data => {
       this.loading.dismissAll()
-      this._param.paramsData['firstname'] = this.profileGroup.controls['firstname'].value
-      this._param.paramsData['surname'] = this.profileGroup.controls['surname'].value
-      this._param.paramsData['sex'] = this.profileGroup.controls['sex'].value
-      this._param.paramsData['phone_number'] = this.profileGroup.controls['phone_number'].value
-      this._param.paramsData['email'] = this.profileGroup.controls['email'].value
-      this._param.paramsData['profile_picture'] = this.imageName
+      // this._param.paramsData['firstname'] = this.profileGroup.controls['firstname'].value
+      // this._param.paramsData['surname'] = this.profileGroup.controls['surname'].value
+      // this._param.paramsData['sex'] = this.profileGroup.controls['sex'].value
+      // this._param.paramsData['phone_number'] = this.profileGroup.controls['phone_number'].value
+      // this._param.paramsData['email'] = this.profileGroup.controls['email'].value
+      // this._param.paramsData['profile_picture'] = this.imageName
+      this.getProfile()
+      // this.profileGroup.reset()
       // this._storage.get('userProfile')
       // .then((data)=>{
       //   data['firstname'] = this.profileGroup.controls['firstname'].value

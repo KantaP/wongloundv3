@@ -6,6 +6,7 @@ import { External } from '../../providers/external'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MainPage } from '../main/main'
 import { Facebook } from '@ionic-native/facebook';
+import { Paramservice } from '../../providers/paramservice'
 import { StorageSession } from '../../providers/storage-session'
 /*
   Generated class for the Login page.
@@ -28,7 +29,8 @@ export class LoginPage {
    private _fb: FormBuilder , 
    private _storage: StorageSession , 
    private _alert: AlertController,
-   public facebook: Facebook) {
+   public facebook: Facebook,
+   public param: Paramservice) {
     this.loginForm = this._fb.group({
       email: ['' , [Validators.required]],
       password: ['' , [Validators.required]]
@@ -84,6 +86,7 @@ export class LoginPage {
         }else{
           // save to storage do it later
           this._storage.set('userProfile' , resJson['data'])
+          this.param.paramsData = resJson['data']
           this.navCtrl.setRoot(MainPage , {userProfile:resJson['data']})
         }
       }

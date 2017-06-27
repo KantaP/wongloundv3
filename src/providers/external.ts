@@ -30,6 +30,10 @@ export class External {
     return this.http.post(API_URL + 'authenticate/signUp' , body , {headers : headers})
   }
 
+  findProvince() {
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.get(API_URL + 'etc/findProvince' , { headers: headers})
+  }
 
   login(loginRequest: Login) {
     var body = JSON.stringify(loginRequest)
@@ -64,6 +68,11 @@ export class External {
     var headers = new Headers({'Content-type': 'application/json'})
     return this.http.get(API_URL + 'shop/findPromotionByShop/' + shop_id , { headers: headers})
   } 
+
+  findPromotionByShopAll(shop_id) {
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.get(API_URL + 'shop/findPromotionByShopAll/' + shop_id , { headers: headers})
+  }
 
   createShopPromotion(shopPromotion: ShopPromotion) {
     var body = JSON.stringify(shopPromotion)
@@ -154,9 +163,10 @@ export class External {
     return this.http.post(API_URL + 'shop/unsetActivity' , body , { headers: headers})
   }
 
-  getLucky() {
+  getLucky(province: string) {
+    var body = JSON.stringify({province: province})
     var headers = new Headers({'Content-type': 'application/json'})
-    return this.http.get(API_URL + 'etc/getLucky' , { headers: headers})
+    return this.http.post(API_URL + 'etc/getLucky' , body ,{ headers: headers})
   }
 
   incrementCountView(shop_id: number) {
@@ -177,6 +187,40 @@ export class External {
   checkInvoiceStatus(invoice_id: string) {
     var headers = new Headers({'Content-type': 'application/json'})
     return this.http.get(API_URL + 'etc/checkInvoice/'+invoice_id , { headers: headers})
+  }
+
+  changePassword(changeRequest: any) {
+    var body = JSON.stringify(changeRequest)
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.post(API_URL + 'etc/changePassword' , body , { headers: headers})
+  }
+
+  activityShops(province: string) {
+    var body = JSON.stringify({province: province })
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.post(API_URL + 'etc/activityShops' ,body,{ headers: headers})
+  }
+
+  getluckyToday(province: string) {
+    var body = JSON.stringify({province: province })
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.post(API_URL + 'shop/getLuckyShop' ,body ,{ headers: headers})
+  }
+
+  deletePromotion(proId: any, shopId: any) {
+    var body = JSON.stringify({proId: proId, shopId: shopId})
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.post(API_URL + 'shop/deletePromotion' ,body ,{ headers: headers})
+  }
+
+  loadImage(image: string) {
+    return API_URL + 'images/'+ image
+  }
+
+  getUserProfile(userId: any) {
+    var body = JSON.stringify({userId:userId})
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.post(API_URL + 'authenticate/getUserProfile' ,body ,{ headers: headers})
   }
 
 }

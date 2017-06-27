@@ -5,48 +5,39 @@
         </button>
         <ion-title class="font-white-color">
             <!--วงเล่า-->
+            <img src="assets/logo.png" width="32" height="32" />
         </ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content class="bg">
     <ion-grid class="padding-0">
-        <ion-row>
-            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'shop' , 'tab-button' : true}" (click)="toggle('shop')">
+        <!--<ion-row>
+            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'shop' , 'tab-button' : true , 'custom-border': true}" (click)="toggle('shop')">
                 <button class="font-color-default" block ion-button clear>ร้าน</button>
             </ion-col>
-            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'activity' , 'tab-button' : true}" (click)="toggle('activity')">
+            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'activity' , 'tab-button' : true , 'custom-border': true}" (click)="toggle('activity')">
                 <button class="font-color-default" block ion-button clear>กิจกรรม</button>
             </ion-col>
-        </ion-row>
-        <ion-row *ngIf="currentView == 'shop'">
-            <ion-col [ngClass]="{'tab-button' : true, 'width-flex-100':true}">
-                <button class="font-color-default" block ion-button clear (click)="searchByType(1)">เล่าสบาย</button>
-            </ion-col>
-            <ion-col [ngClass]="{'tab-button' : true, 'width-flex-100':true}">
-                <button class="font-color-default" block ion-button clear (click)="searchByType(2)">เล่าหรู</button>
-            </ion-col>
-            <ion-col [ngClass]="{'tab-button' : true, 'width-flex-100':true}">
-                <button class="font-color-default" block ion-button clear (click)="searchByType(3)">เล่าไม่รู้เรื่อง</button>
-            </ion-col>
-            <ion-col [ngClass]="{'tab-button' : true, 'width-flex-100':true}">
-                <button class="font-color-default" block ion-button clear (click)="searchByType(4)">เล่าไม่ได้</button>
-            </ion-col>
-            <ion-col [ngClass]="{'tab-button' : true, 'width-flex-100':true}">
-                <button class="font-color-default" block ion-button clear (click)="searchByType(5)">เล่ากันเอง</button>
-            </ion-col>
+        </ion-row>-->
+        <ion-row class="tab-button-custom" style="overflow: scroll;flex-wrap:nowrap;width:100%;">
+            <button class="font-color-default main-menu"  ion-button clear (click)="toggle('activity')">กิจกรรม</button>
+            <button class="font-color-default main-menu"  ion-button clear (click)="searchByType(1)">เล่าสบาย</button>
+            <button class="font-color-default main-menu"  ion-button clear (click)="searchByType(2)">เล่าหรู</button>
+            <button class="font-color-default main-menu"  ion-button clear (click)="searchByType(3)">เล่าไม่รู้เรื่อง</button>
+            <button class="font-color-default main-menu"  ion-button clear (click)="searchByType(4)">เล่าไม่ได้</button>
+            <button class="font-color-default main-menu"  ion-button clear (click)="searchByType(5)">เล่ากันเอง</button>
         </ion-row>
         <ion-row *ngIf="currentView != 'activity'">
-            <ion-slides pager style="max-height:200px;">
+            <ion-slides #featureslides pager style="max-height:200px;" >
                 <ion-slide *ngFor="let feature of topFeatures; let i = index" (click)="goToShop(feature.shop_id)">
                     <img [src]="(feature.shop_image_1) ? api_url + 'images/' + feature.shop_image_1 : 'assets/noimage.jpeg'">
                     <span style="position: absolute;bottom: 50px;color: #fff; left:20px; font-size:1.2em;" >{{feature.shop_name}}</span>
                     <span style="position: absolute;bottom: 30px;color: #fff; left:20px; font-size:0.8em;" >{{feature.province}}</span>
-                    
                 </ion-slide>
             </ion-slides>
         </ion-row>
-        <ion-row class="justify-center align-center flex-wrap" *ngIf="currentView != 'activity'">
+        <ion-row class="justify-center align-center flex-wrap custom-border" *ngIf="currentView != 'activity'">
             <ion-col class="width-flex-50"  *ngFor="let shop of recommendedShop; let i = index">
                 <div (click)="goToShop(shop.shop_id)" style="background:transparent;">
                     <img style="height:150px;" [src]="(shop.shop_image_1) ? api_url + 'images/' + shop.shop_image_1 : 'assets/noimage.jpeg'" >
@@ -57,33 +48,66 @@
                     padding: 5px;
                     background:transparent;
                     color:#fff;
-                ">{{shop.shop_name}}<br/> {{shop.province}} <br/> เวลาเปิดทำการ {{shop.open_time}} - {{shop.close_time}}</div>
+                ">{{shop.shop_name}}<br/> {{shop.province}} <br/> {{shop.open_time}} - {{shop.close_time}}</div>
             </ion-col>
         </ion-row>
         <ion-row class="margin-top-10 justify-center align-center padding-10" [hidden]="currentView == 'activity'">
             <div #map id="map" style="height: 250px;width:100%;"></div>
         </ion-row>
-        <ion-row class="margin-top-10 justify-center padding-10">
-            <ion-list style="width:100%;">
-                <ion-item *ngFor="let normalshop of normalShopList" (click)="goToShop(normalshop.shop_id)" >
+        <ion-row *ngIf="currentView != 'activity'" class="margin-top-10 justify-center padding-10">
+            <ion-list style="width:100%;" *ngIf="normalShopList.length > 0">
+                <ion-item *ngFor="let normalshop of showNormalShop()" (click)="goToShop(normalshop.shop_id)" >
                     <ion-avatar item-left>
                         <img [src]="normalshop.shop_image_1">
                     </ion-avatar>
                     <h2>{{normalshop.shop_name}}</h2>
-                    <h2>{{normalshop.shop_name}}</h2>
                 </ion-item>
             </ion-list>
+        </ion-row>
+        <ion-row *ngIf="currentView != 'activity' && normalShopList.length > 0" class="margin-top-10 justify-center padding-10">
+            <button ion-button block outline color="light" (click)="nextPage()">แสดงเพิ่มเติม</button>
         </ion-row>
         <ion-row *ngIf="currentView == 'activity'"  class="justify-center">
-            <p class="font-white-color">รายฃื่อผู้โชคดีแต่ละสัปดาห์</p>
-        </ion-row>
-        <ion-row *ngIf="currentView == 'activity'" >
-            <ion-list>
-                <ion-item *ngFor="let lucky of luckylist; let i = index">
-                    <h2>คุณ {{lucky.firstname}}</h2>
-                    <p>{{lucky.shop_name}}</p>
-                </ion-item>
-            </ion-list>
+            <ion-grid class="padding-0">
+                <ion-row class="justify-center">
+                    <p class="font-white-color">ผู้โชคดีในวันนี้</p>
+                </ion-row>
+                <ion-row class="justify-center" >
+                    <ion-list style="width:90%;">
+                    <ion-item *ngFor="let person of luckyPerson">
+                        <ion-avatar item-left>
+                            <img src="assets/noimage.jpeg">
+                        </ion-avatar>
+                        <h2>คุณ {{person.firstname}}</h2>
+                        <h2>ร้าน {{person.shop_name}}</h2>
+                    </ion-item>
+                    </ion-list>
+                </ion-row>
+                <ion-row class="justify-center">
+                    <p class="font-white-color">ร้านที่ร่วมสนุกในสัปดาห์นี้</p>
+                </ion-row>
+                <ion-row class="justify-center">
+                    <ion-list style="width:90%;">
+                        <ion-item *ngFor="let lucky of luckyShops; let i = index">
+                            <ion-avatar item-left>
+                                <img [src]="lucky.shop_image_1">
+                            </ion-avatar>
+                            <h2>{{lucky.shop_name}}</h2>
+                        </ion-item>
+                    </ion-list>
+                </ion-row>
+                <ion-row class="justify-center">
+                    <p class="font-white-color">รายฃื่อผู้โชคดีแต่ละสัปดาห์</p>
+                </ion-row>
+                <ion-row class="justify-center">
+                    <ion-list style="width:90%;">
+                        <ion-item *ngFor="let luckyPerson of luckyList; let i = index">
+                            <h2>คุณ {{luckyPerson.firstname}}</h2>
+                            <p>{{luckyPerson.shop_name}}</p>
+                        </ion-item>
+                    </ion-list>
+                </ion-row>
+            </ion-grid>
         </ion-row>
     </ion-grid>
 </ion-content>

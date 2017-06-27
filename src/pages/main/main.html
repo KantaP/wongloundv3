@@ -3,9 +3,19 @@
     <ion-content class="bg">
         <ion-list>
             <ion-item style="border:0px !important;">
+                <ion-grid class="padding-0">
+                    <ion-row class="justify-center" >
+                        <img [src]="showUserPicture()" class="round-image-2"/>
+                    </ion-row> 
+                    <ion-row class="justify-center margin-top-5">
+                        <h2>{{showUserName()}}</h2>
+                    </ion-row>  
+                </ion-grid>
+            </ion-item>
+            <ion-item style="border:0px !important;">
                 <ion-label>ร้านภายใน</ion-label>
                 <ion-select style="color:#fff;width:100%;" [(ngModel)]="province" (ngModelChange)="provinceSelect($event)">
-                    <ion-option *ngFor="let province of provinces" [value]="province.name">{{province.name}}</ion-option>
+                    <ion-option *ngFor="let item of provinces" [value]="item.province">{{item.province}}</ion-option>
                 </ion-select>
             </ion-item>
             <ion-item class="item-custom" *ngIf="showCountView" style="border:0px !important;">
@@ -18,7 +28,20 @@
                     แจ้งปัญหา
                 </button>
             </ion-item>
-            <ion-item class="item-custom" style="border:0px !important;position:absolute;bottom:0px;">
+            <ion-item  class="item-custom" style="border:0px !important;">
+                <button ion-button menuClose (click)="goToContact()">
+                    ติดต่อ
+                </button>
+            </ion-item>
+            <!--<ion-item *ngIf="paramservice.paramsData">
+                <pre>{{(paramText())}}</pre>
+            </ion-item>-->
+            <!--<ion-item  class="item-custom" style="border:0px !important;">
+                <button ion-button menuClose>
+                    FAQ
+                </button>
+            </ion-item>-->
+            <ion-item class="item-custom" style="border:0px !important;">
                  <button ion-button menuClose (click)="signOut()">
                     ออกจากระบบ
                 </button>

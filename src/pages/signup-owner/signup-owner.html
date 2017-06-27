@@ -6,11 +6,16 @@
 -->
 
 <ion-header>
-    <ion-navbar>
-        <!--<ion-title>
-            Register Owner
-        </ion-title>-->
+
+  <ion-navbar>
+        <button ion-button menuToggle icon-only>
+          <ion-icon name='menu'></ion-icon>
+        </button>
+        <ion-title class="font-white-color">
+            <img src="assets/logo.png" width="32" height="32" />
+        </ion-title>
     </ion-navbar>
+
 </ion-header>
 
 <ion-content padding class="bg">
@@ -21,8 +26,8 @@
             </ion-row>
             <ion-row [ngClass]="{'margin-top-50 justify-center align-center': true , 'form-error': !user.controls.email.valid && submitted}">
                 <ion-item>
-                    <ion-label fixed>อีเมล์: </ion-label>
-                    <ion-input type="email" formControlName="email"></ion-input>
+                    <ion-label fixed>ชื่อผู้ใช้: </ion-label>
+                    <ion-input type="text" formControlName="email"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.password.valid && submitted}">
@@ -102,11 +107,11 @@
                     </ion-item>-->
 
                     <ion-select formControlName="shop_type">
-                        <ion-option value="1">ชิว(ร้านเล็ก-ใหญ่&มิคต่ำกว่า29)</ion-option>
-                        <ion-option value="2">Bar&Bistro(ขนาดกลาง-ใหญ่&มิค 30+)</ion-option>
-                        <ion-option value="3">ผับ (ผับ)</ion-option>
-                        <ion-option value="4">20+(มีผู้หญิงนั้งดื่ม)</ion-option>
-                        <ion-option value="5">เพื่อชีวิต(เพื่อชีวิต&ลูกทุ่ง)</ion-option>
+                        <ion-option value="1">เล่าสบาย(ร้านขนาดเล็ก-มิคไม่เกิน30)</ion-option>
+                        <ion-option value="2">เล่าหรู(ร้านขนาดกลางขึ้นไป-มิค30+)</ion-option>
+                        <ion-option value="3">เล่าไม่รู้เรื่อง(ผับ)</ion-option>
+                        <ion-option value="4">เล่าไม่ได้(มีเด็กนั้งดริ๊ง-เด็กนั้งคุย</ion-option>
+                        <ion-option value="5">เล่ากันเอง(เพื่อชีวิต-ลูกทุ่ง)</ion-option>
                     </ion-select>
                 </ion-item>
             </ion-row>

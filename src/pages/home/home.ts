@@ -7,6 +7,7 @@ import { API_URL } from '../../providers/settings'
 import { Paramservice } from '../../providers/paramservice'
 import { Internal } from '../../providers/internal'
 import * as moment from 'moment'
+import { Slides } from 'ionic-angular';
 declare var google;
 @Component({
   selector: 'page-home',
@@ -14,7 +15,7 @@ declare var google;
 })
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
-
+  @ViewChild('featureslides') slides: Slides;
   map: any
   mapInitialised: boolean
   marker: Array<any>
@@ -29,7 +30,11 @@ export class HomePage {
   provinces: any
   normalShopList: Array<any>
   _moment: any
+  luckyShops: any
+  luckyPerson : any
+  normalPage: number
   
+  sliderObservable:any
 
   constructor(public navCtrl: NavController ,
   public _external: External , 
@@ -48,11 +53,15 @@ export class HomePage {
     this.marker = []
     this.normalShopList = []
     this._moment = moment
+    this.luckyShops = []
+    this.luckyPerson = [] 
+    this.normalPage = 1
+    this.currentView = 'shop'
   }
 
   toggle(view: string) {
     if(this.currentView != view) this.currentView = view
-    else this.currentView = ''
+    else this.currentView = 'shop'
     
     // if(this.currentView = 'shop') this.initMap()
   }
@@ -82,7 +91,10 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: feature.shop_name ,
-            content:`<div>` + feature.shop_name + ` <a href="tel:${feature.phone_number}">${feature.phone_number}</a></div>`
+            content:`<div>` + feature.shop_name + ` 
+                      <a href="tel:${feature.phone_number}">${feature.phone_number}</a><br/>
+                      <a href="http://maps.google.com/maps?q=${feature.latitude},${feature.longitude}">ดูใน google map </a>
+                    </div>`
           })
            marker.addListener('click', function(){
                     this.map.infowindow.setContent(marker.content);
@@ -104,7 +116,10 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: shop.shop_name,
-            content: `<div>` + shop.shop_name + ` <a href="tel:${shop.phone_number}">${shop.phone_number}</a></div>`
+            content: `<div>` + shop.shop_name + ` 
+                        <a href="tel:${shop.phone_number}">${shop.phone_number}</a><br/>
+                        <a href="http://maps.google.com/maps?q=${shop.latitude},${shop.longitude}">ดูใน google map </a>
+                      </div>`
           })
          marker.addListener('click', function(){
                     this.map.infowindow.setContent(marker.content);
@@ -116,6 +131,37 @@ export class HomePage {
       }
     )
     this.loadNormalShop()
+    this._external.getLucky(this.province)
+    .subscribe(
+      res => {
+        var resJson = res.json()
+        this.luckyList = resJson
+      }
+    )
+    this._external.getluckyToday(this.province)
+    .subscribe(
+      res => {
+        var resJson = res.json()
+        this.luckyPerson = resJson.data
+      }
+    )
+    this.loadActivityShops()
+  }
+
+  showNormalShop() {
+    var newArr = []
+    var total = this.normalPage * 5
+    for(let i = 0; i < total; i++) {
+      if(this.normalShopList[i]) {
+        newArr.push(this.normalShopList[i])
+      }
+
+    }
+    return newArr
+  }
+
+  nextPage() {
+    this.normalPage += 1
   }
 
   loadNormalShop(type = 0) {
@@ -132,7 +178,10 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: normalshop.shop_name ,
-            content: `<div>` + normalshop.shop_name + ` <a href="tel:${normalshop.phone_number}">${normalshop.phone_number}</a></div>`
+            content: `<div>` + normalshop.shop_name + ` 
+                        <a href="tel:${normalshop.phone_number}">${normalshop.phone_number}</a><br/>
+                        <a href="http://maps.google.com/maps?q=${normalshop.latitude},${normalshop.longitude}">ดูใน google map </a>
+                      </div>`
           })
 
            marker.addListener('click', function(){
@@ -147,36 +196,82 @@ export class HomePage {
     )
   }
 
-  ionViewDidLoad() {
-    
-    this.initMap()
-    this._external.getLucky()
+  loadActivityShops() {
+    this._external.activityShops(this.province) 
     .subscribe(
       res => {
         var resJson = res.json()
-        this.luckyList = resJson
+        this.luckyShops = resJson
       }
     )
-    
+  }
+
+  ionViewWillEnter() {
+
+    this.initMap()
     this._param.provinceSelected.subscribe(
       data => {
         this.province = data
         this.loadAd()
-      })
+    })
+
+    this.sliderObservable = setInterval(()=>{
+        this.autoPlaySlider()
+      },3000)
 
   }
 
-  // ionViewWillEnter(){
-  //   this.initMap()
+  autoPlaySlider(){
+    if(this.currentView != 'activity') {
+      if(this.topFeatures.length > 0) {
+        var slider_index = this.slides.getActiveIndex();
+        if(slider_index < this.topFeatures.length){
+            this.slides.slideTo(slider_index+1);
+        }
+        else{
+            this.slides.slideTo(0);
+        }
+      }
+    }
+    
+  }
+
+  ionViewDidLeave() {
+    clearInterval(this.sliderObservable)
+  }
+
+  // ionViewDidLoad() {
+  //     this.sliderObservable = setInterval(()=>{
+  //       this.autoPlaySlider()
+  //     },3000)
   // }
 
   searchByType(type) {
     this.toggle('shop')
+    this.clearMarker()
     this._external.getShopByType(type, this.province)
     .subscribe(
       res => {
         var resJson = res.json()
         this.recommendedShop = resJson;
+        for(let shop of this.recommendedShop) {
+          let latLng = new google.maps.LatLng(shop.latitude, shop.longitude);
+          let marker = new google.maps.Marker({
+            position: latLng,
+            map: this.map,
+            title: shop.shop_name,
+            content: `<div>` + shop.shop_name + ` 
+                        <a href="tel:${shop.phone_number}">${shop.phone_number}</a><br/>
+                        <a href="http://maps.google.com/maps?q=${shop.latitude},${shop.longitude}">ดูใน google map </a>
+                      </div>`
+          })
+         marker.addListener('click', function(){
+                    this.map.infowindow.setContent(marker.content);
+                    this.map.infowindow.open(this.map,marker);
+
+          });
+          this.marker.push(marker)
+        }
       }
     )
 
@@ -184,13 +279,34 @@ export class HomePage {
     .subscribe(
       res => {
         var resJson = res.json()
-        this.topFeatures = resJson;
+        this.topFeatures = resJson
+        for(let feature of this.topFeatures) {
+          let latLng = new google.maps.LatLng(feature.latitude, feature.longitude);
+          let marker = new google.maps.Marker({
+            position: latLng,
+            map: this.map,
+            title: feature.shop_name ,
+            content:`<div>` + feature.shop_name + ` 
+                      <a href="tel:${feature.phone_number}">${feature.phone_number}</a><br/>
+                      <a href="http://maps.google.com/maps?q=${feature.latitude},${feature.longitude}">ดูใน google map </a>
+                    </div>`
+          })
+           marker.addListener('click', function(){
+                    this.map.infowindow.setContent(marker.content);
+                    this.map.infowindow.open(this.map,marker);
+
+          });
+          this.marker.push(marker)
+        }
       }
     )
     this.loadNormalShop(type)
+    
   }
 
   initMap() {
+    this.map = null
+    this.marker = []
     this.geolocation.getCurrentPosition().then((position) => {
       // alert('Latitude:' + position.coords.latitude )
       // alert('Longitude:' + position.coords.longitude)
@@ -201,11 +317,16 @@ export class HomePage {
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       }
+      var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'E6C12F',
+                      new google.maps.Size(21, 34),
+                      new google.maps.Point(0,0),
+                      new google.maps.Point(10, 34));
       // alert('map')
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       var marker = new google.maps.Marker({
         position: latLng,
-        map: this.map
+        map: this.map,
+        icon: pinImage,
       });
 
       this.map.infowindow = new google.maps.InfoWindow();
@@ -240,4 +361,10 @@ export class HomePage {
     });
   }
 
+  clearMarker() {
+    for(let i = 0 ; i < this.marker.length; i++){
+      this.marker[i].setMap(null)
+    }
+    this.marker = []
+  }
 }
