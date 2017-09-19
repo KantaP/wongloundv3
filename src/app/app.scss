@@ -170,12 +170,12 @@ p {
 }
 
 .custom-border {
-    border: 1px solid #e6c12f !important;
+    // border: 1px solid #e6c12f !important;
 }
 
 ion-item {
     background-color: transparent !important;
-    border: 1px solid #e6c12f !important;
+    border-bottom: 1px solid #e6c12f !important;
     & ion-label {
         color: #fff !important;
     }
@@ -226,16 +226,27 @@ button {
 }
 
 .font-color-default {
-    color: #e6c12f;
+    // color: #e6c12f;
+    color:white;
+    
 }
 
 .tab-button-custom {
-    border:1px solid #e6c12f;
+    // border:1px solid #e6c12f;
 }
 
 .button > span , .bar-button-menutoggle > span {
-    color: #e6c12f; 
+    color: white; 
+    // color: #e6c12f; 
 }
+
+
+.picker-wrapper * {
+    color: #e6c12f !important;
+}
+// .button .picker-button > span.button-inner {
+//     color: red;
+// }
 
 .select-text {
     color:#fff;
@@ -271,7 +282,7 @@ button {
 }
 
 ion-item {
-    border-radius: 10px !important;
+    // border-radius: 10px !important;
 }
 
 .radius10 {
@@ -311,7 +322,16 @@ ion-title {
 }
 
 .toolbar-title-md {
-    margin-right: 15%;
+    // margin-right: 15%;
 }
 
+.button-ios{
+    margin: 0px;
+}
 
+.toolbar-ios ion-title{
+    padding: 0 10px 1px;
+}
+.item-md.item-input.ng-valid.input-has-value:not(.input-has-focus) .item-inner{
+    box-shadow: 0px;
+}

@@ -11,7 +11,8 @@
           <ion-icon name='menu'></ion-icon>
         </button>
         <ion-title class="font-white-color">
-            <img src="assets/logo.png" width="32" height="32" />
+<!--            <img src="assets/logo.png" width="32" height="32" />-->
+<div style='text-align:right;color:#e6c12f;font-size:20px' >วงเล่า</div>
         </ion-title>
     </ion-navbar>
 
@@ -33,11 +34,11 @@
                 <ion-grid class="margin-top-10 padding-left-15 padding-right-15">
                     <ion-row>
                         <ion-col class="width-flex-30">
-                            <span class="font-white-color"> ชื่อ </span>
+                            <span class="font-white-color"> Email </span>
                         </ion-col>
                         <ion-col class="width-flex-70">
-                            <span class="font-white-color" *ngIf="!editMode"> {{profileGroup.controls['firstname'].value}} </span>
-                            <input type="text" formControlName="firstname" *ngIf="editMode" />
+                            <span class="font-white-color" *ngIf="!editMode"> {{profileGroup.controls['email'].value}} </span>
+                            <input type="email" formControlName="email" *ngIf="editMode" />
                         </ion-col>
                     </ion-row>
                     <!--<ion-row>
@@ -49,7 +50,7 @@
                             <input type="text" formControlName="surname" *ngIf="editMode" />
                         </ion-col>
                     </ion-row>-->
-                    <ion-row>
+                    <!--<ion-row>
                         <ion-col class="width-flex-30">
                             <span class="font-white-color"> เพศ </span>
                         </ion-col>
@@ -60,8 +61,8 @@
                                 <ion-option value="F">หญิง</ion-option>
                             </ion-select>
                         </ion-col>
-                    </ion-row>
-                    <ion-row>
+                    </ion-row>-->
+                    <!--<ion-row>
                         <ion-col class="width-flex-30">
                             <span class="font-white-color"> ชื่อผู้ใช้งาน </span>
                         </ion-col>
@@ -69,8 +70,8 @@
                             <span class="font-white-color" *ngIf="!editMode"> {{profileGroup.controls['email'].value}} </span>
                             <input type="text" formControlName="email" *ngIf="editMode" />
                         </ion-col>
-                    </ion-row>
-                    <ion-row>
+                    </ion-row>-->
+                    <!--<ion-row>
                         <ion-col class="width-flex-30">
                             <span class="font-white-color"> เบอร์โทรศัพท์ </span>
                         </ion-col>
@@ -78,7 +79,7 @@
                             <span class="font-white-color" *ngIf="!editMode"> {{profileGroup.controls['phone_number'].value}} </span>
                             <input type="text" formControlName="phone_number" *ngIf="editMode" />
                         </ion-col>
-                    </ion-row>
+                    </ion-row>-->
                     <ion-row *ngIf="showChangePassword">
                         <ion-grid class="padding-0">
                             <ion-row>

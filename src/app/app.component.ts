@@ -3,8 +3,8 @@ import { Platform } from 'ionic-angular';
 // import { StatusBar, Splashscreen } from 'ionic-native';
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
-// import { MainPage } from '../pages/main/main';
-import { LoginPage } from '../pages/login/login';
+import { MainPage } from '../pages/main/main';
+// import { LoginPage } from '../pages/login/login';
 // import { TabsPage } from '../pages/tabs/tabs'
 // import { ShopProfilePage} from '../pages/shop-profile/shop-profile'
 
@@ -12,7 +12,7 @@ import { LoginPage } from '../pages/login/login';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage = LoginPage;
+  rootPage = MainPage;
 
   constructor(public platform: Platform , public statusBar: StatusBar , public splashScreen: SplashScreen)  {
     platform.ready().then(() => {
@@ -23,7 +23,7 @@ export class MyApp {
       statusBar.overlaysWebView(true);
 
       // set status bar to white
-      statusBar.backgroundColorByHexString('#ffffff');
+      statusBar.backgroundColorByHexString('#000');
       splashScreen.hide();
     });
   }

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.wonglound363813" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ionicframework.wonglound363813" version="1.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>วงเล่า</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <description>แอฟนี้จะช่วยให้คุณสามารถหาร้านนั่งดื่มได้อย่างง่ายดาย ภายในจังหวัดที่คุณอาศัยอยู่หรือที่คุณเลือก</description>
+    <author email="kantajobz@gmail.com" href="http://ionicframework.com/">Wong Lound TEAM</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
@@ -75,9 +75,10 @@
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
+    <allow-navigation href="http://192.168.1.53:8100" />
+    <allow-navigation href="http://192.168.1.33:8100" />
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
-    <plugin name="cordova-plugin-console" spec="^1.0.5" />
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-email" spec="~1.2.6" />
     <plugin name="cordova-plugin-facebook4" spec="~1.7.4">

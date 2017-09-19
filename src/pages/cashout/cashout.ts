@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {  NavController, NavParams , LoadingController , AlertController} from 'ionic-angular';
+import {  NavController, NavParams , LoadingController , AlertController , Tabs} from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import * as moment from 'moment'
 import { Paramservice } from '../../providers/paramservice'
@@ -25,7 +25,7 @@ export class CashoutPage {
   _moment: any
 
   constructor(public navCtrl: NavController, public navParams: NavParams , public iab: InAppBrowser , public param: Paramservice , public loadCtrl: LoadingController 
-  , public _external: External , public alertCtrl: AlertController) {
+  , public _external: External , public alertCtrl: AlertController , private tabs: Tabs) {
     this.positionSelected = []
     this.homeChecked = true
     this.typeChecked = true
@@ -33,6 +33,12 @@ export class CashoutPage {
   }
 
   ionViewDidLoad() {
+    const browser = this.iab.create('http://128.199.210.96/payment?shop_id='+this.param.paramsData.shop_id)
+    browser.show()
+    browser.on('exit').subscribe(
+      event => {
+        this.tabs.select(0)
+      })
   }
 
   positionSelect(position: string) {

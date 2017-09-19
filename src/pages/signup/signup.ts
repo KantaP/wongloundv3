@@ -27,9 +27,9 @@ export class SignupPage {
     // province: ['' , [Validators.required]],
     this.user = this._fb.group({
       email: ['' , [Validators.required]] ,
-      firstname: ['' , [Validators.required]],
-      gender: ['' , [Validators.required]],
-      phone: ['' , [Validators.required]],
+      firstname: [''],
+      gender: [''],
+      phone: [''],
       password: ['', [Validators.required]] ,
       accept: [false , [Validators.required]]
     })

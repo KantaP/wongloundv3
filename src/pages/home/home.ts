@@ -7,7 +7,8 @@ import { API_URL } from '../../providers/settings'
 import { Paramservice } from '../../providers/paramservice'
 import { Internal } from '../../providers/internal'
 import * as moment from 'moment'
-import { Slides } from 'ionic-angular';
+import { Slides , LoadingController } from 'ionic-angular';
+import { StorageSession } from '../../providers/storage-session'
 declare var google;
 @Component({
   selector: 'page-home',
@@ -40,7 +41,9 @@ export class HomePage {
   public _external: External , 
   public _param: Paramservice, 
   public _internal: Internal,
-  public geolocation: Geolocation) {
+  public geolocation: Geolocation, 
+  public _loading: LoadingController,
+  public _storage: StorageSession) {
     this.sliderOptions = {
        pager: true
     }
@@ -91,7 +94,7 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: feature.shop_name ,
-            content:`<div>` + feature.shop_name + ` 
+            content:`<div>` + feature.shop_name + `<br/> 
                       <a href="tel:${feature.phone_number}">${feature.phone_number}</a><br/>
                       <a href="http://maps.google.com/maps?q=${feature.latitude},${feature.longitude}">ดูใน google map </a>
                     </div>`
@@ -116,7 +119,7 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: shop.shop_name,
-            content: `<div>` + shop.shop_name + ` 
+            content: `<div>` + shop.shop_name + ` <br/>
                         <a href="tel:${shop.phone_number}">${shop.phone_number}</a><br/>
                         <a href="http://maps.google.com/maps?q=${shop.latitude},${shop.longitude}">ดูใน google map </a>
                       </div>`
@@ -178,7 +181,7 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: normalshop.shop_name ,
-            content: `<div>` + normalshop.shop_name + ` 
+            content: `<div>` + normalshop.shop_name + ` <br/>
                         <a href="tel:${normalshop.phone_number}">${normalshop.phone_number}</a><br/>
                         <a href="http://maps.google.com/maps?q=${normalshop.latitude},${normalshop.longitude}">ดูใน google map </a>
                       </div>`
@@ -206,10 +209,12 @@ export class HomePage {
     )
   }
 
-  ionViewWillEnter() {
-
+  ionViewDidEnter() {
     this.initMap()
-    this._param.provinceSelected.subscribe(
+  } 
+
+  ionViewWillEnter() {
+    this._param.getProvince().subscribe(
       data => {
         this.province = data
         this.loadAd()
@@ -238,13 +243,15 @@ export class HomePage {
 
   ionViewDidLeave() {
     clearInterval(this.sliderObservable)
+    this.map = null
   }
 
-  // ionViewDidLoad() {
-  //     this.sliderObservable = setInterval(()=>{
-  //       this.autoPlaySlider()
-  //     },3000)
-  // }
+  ionViewDidLoad() {
+      // this.sliderObservable = setInterval(()=>{
+      //   this.autoPlaySlider()
+      // },3000)
+      
+  }
 
   searchByType(type) {
     this.toggle('shop')
@@ -260,7 +267,7 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: shop.shop_name,
-            content: `<div>` + shop.shop_name + ` 
+            content: `<div>` + shop.shop_name + ` <br/>
                         <a href="tel:${shop.phone_number}">${shop.phone_number}</a><br/>
                         <a href="http://maps.google.com/maps?q=${shop.latitude},${shop.longitude}">ดูใน google map </a>
                       </div>`
@@ -286,7 +293,7 @@ export class HomePage {
             position: latLng,
             map: this.map,
             title: feature.shop_name ,
-            content:`<div>` + feature.shop_name + ` 
+            content:`<div>` + feature.shop_name + ` <br/>
                       <a href="tel:${feature.phone_number}">${feature.phone_number}</a><br/>
                       <a href="http://maps.google.com/maps?q=${feature.latitude},${feature.longitude}">ดูใน google map </a>
                     </div>`
@@ -304,61 +311,49 @@ export class HomePage {
     
   }
 
+
+
   initMap() {
-    this.map = null
-    this.marker = []
-    this.geolocation.getCurrentPosition().then((position) => {
-      // alert('Latitude:' + position.coords.latitude )
-      // alert('Longitude:' + position.coords.longitude)
-      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-   
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-      var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'E6C12F',
-                      new google.maps.Size(21, 34),
-                      new google.maps.Point(0,0),
-                      new google.maps.Point(10, 34));
-      // alert('map')
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-      var marker = new google.maps.Marker({
-        position: latLng,
-        map: this.map,
-        icon: pinImage,
+    if(google == undefined) {
+      this.initMap()
+    }else{
+      var loader = this._loading.create({
+        content: 'Loading map ...'
+      })
+      loader.present()
+      this.map = null 
+      this.marker = []
+      this._param.setProvince('ชลบุรี')
+      this.map = new google.maps.Map(this.mapElement.nativeElement);
+      this.map.infowindow = new google.maps.InfoWindow()
+      this.geolocation.getCurrentPosition().then((position) => {
+      
+        let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+     
+        this.map.setZoom(13);      // This will trigger a zoom_changed on the map
+        this.map.setCenter(latLng);
+        this.map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + 'E6C12F',
+                        new google.maps.Size(21, 34),
+                        new google.maps.Point(0,0),
+                        new google.maps.Point(10, 34));
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: this.map,
+          icon: pinImage,
+        });
+        this._storage.get('userProfile')
+        .then((data)=>{
+          console.log(data)
+          if(data != null) {
+            this._param.setUserData(data)
+          }
+          loader.dismiss()
+        })
+        
       });
-
-      this.map.infowindow = new google.maps.InfoWindow();
-
-      this._external.searchAddressByLatlng(`${position.coords.latitude},${position.coords.longitude}`)
-      .subscribe(
-        res => {
-          var data = res.json() 
-          var province = ''
-          data = data.results.filter(item => item.types.includes('sublocality_level_1'))
-          province = data[0].address_components.filter(item => item.types.includes("administrative_area_level_1"))
-          this.province = province[0]['short_name'].replace('จ.','')
-          // console.log(this._param.provinceSelected)
-          this._param.provinceSelected.next(this.province)
-          // this.loadAd()
-        }
-      )
-      // this.map.addListener('click', (e) => {
-      //   var marker = new google.maps.Marker({
-      //     position: e.latLng,
-      //     map: this.map
-      //   });
-      //   this.myLatLng = e.latLng
-      //   if(this.marker !== null) {
-      //     this.marker.setMap(null)
-      //     this.marker = null
-      //     this.marker = marker
-      //   }else{
-      //     this.marker = marker
-      //   }
-      // });
-    });
+    }
+    
   }
 
   clearMarker() {

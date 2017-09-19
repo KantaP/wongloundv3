@@ -12,7 +12,7 @@
           <ion-icon name='menu'></ion-icon>
         </button>
         <ion-title class="font-white-color">
-            <img src="assets/logo.png" width="32" height="32" />
+<!--            <img src="assets/logo.png" width="32" height="32" />-->
         </ion-title>
     </ion-navbar>
 
@@ -22,7 +22,7 @@
     <form [formGroup]="user" novalidate>
         <ion-grid>
             <ion-row class="margin-top-50 justify-center align-center">
-                <img src="assets/logo.png" width="200" height="150" />
+                <img src="assets/logo.png"  style="width:50%;height:50%;"  />
             </ion-row>
             <ion-row [ngClass]="{'margin-top-50 justify-center align-center': true , 'form-error': !user.controls.email.valid && submitted}">
                 <ion-item>

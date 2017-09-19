@@ -175,7 +175,9 @@ export class External {
   }
 
   searchAddressByLatlng(latlng) {
-    return this.http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng+'&key=AIzaSyAnFmUDK-M8gfESjHSy7K_SvDj1KEtKK4U')
+    var body = JSON.stringify({url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng+'&key=AIzaSyAnFmUDK-M8gfESjHSy7K_SvDj1KEtKK4U'})
+    var headers = new Headers({'Content-type': 'application/json'})
+    return this.http.post(API_URL + 'etc/getCurrentPositionAddress', body , {headers:headers})
   } 
 
   getNormalShop(province:string , type:number = 0) {

@@ -12,20 +12,48 @@ import { StorageSession } from './storage-session'
 @Injectable()
 export class Paramservice {
   public paramsData: any;
-  public provinceSelected: Subject<string>;
+  private userData : Subject<object>;
+  private provinceSelected: Subject<string>;
   public provinceValue: any
   constructor(public http: Http , private _storage: StorageSession) {
-    this.paramsData = {}
+    this.paramsData = {
+        type: 3,
+    }
     this.provinceSelected = new Subject<string>()
-    this.provinceSelected.subscribe(
-      data => {
-        this.provinceValue = data
-      }
-    )
+    this.userData = new Subject<object>()
+    // this.provinceSelected.subscribe(
+    //   data => {
+    //     this.provinceValue = data
+    //   }
+    // )
     // console.log('Hello Paramservice Provider');
+    this.provinceSelected.next("ฃลบุรี")
   } 
+
+  getProvince() {
+    return this.provinceSelected
+  }
+
+  setProvince(province) {
+    this.provinceSelected.next(province)
+  }
 
   updateProfile() {
     this._storage.set('userProfile' , this.paramsData)
+  }
+
+  setInitialProfile() {
+    this._storage.remove('userProfile')
+    this.paramsData = {
+      type: 3 
+    }
+  }
+
+  setUserData(data) {
+    this.userData.next(data)
+  }
+
+  getUserData() {
+    return this.userData
   }
 }

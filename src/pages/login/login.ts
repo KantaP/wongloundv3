@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams , AlertController } from 'ionic-angular';
+import { NavController, NavParams , AlertController , ModalController} from 'ionic-angular';
 import { SignupTypePage } from '../signup-type/signup-type'
 import { Login } from '../../models/request'
 import { External } from '../../providers/external'
@@ -8,6 +8,7 @@ import { MainPage } from '../main/main'
 import { Facebook } from '@ionic-native/facebook';
 import { Paramservice } from '../../providers/paramservice'
 import { StorageSession } from '../../providers/storage-session'
+
 /*
   Generated class for the Login page.
 
@@ -30,7 +31,8 @@ export class LoginPage {
    private _storage: StorageSession , 
    private _alert: AlertController,
    public facebook: Facebook,
-   public param: Paramservice) {
+   public param: Paramservice,
+   public _modal: ModalController) {
     this.loginForm = this._fb.group({
       email: ['' , [Validators.required]],
       password: ['' , [Validators.required]]
@@ -39,7 +41,6 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
     this._storage.remove('facebookAuth')
     this._storage.remove('facebookData')
     this._storage.get('userProfile')
@@ -48,6 +49,7 @@ export class LoginPage {
         this.navCtrl.setRoot(MainPage,{userProfile:data})
       }
     })
+    
   }
 
   gotoRegister() {

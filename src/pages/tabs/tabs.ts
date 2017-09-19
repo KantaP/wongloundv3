@@ -25,5 +25,12 @@ export class TabsPage {
   }
   ionViewDidLoad(){
     this.userType = this.paramservice.paramsData.type
+    this.paramservice.getUserData()
+    .subscribe(
+      res => {
+        this.userType = res['type']
+        this.paramservice.paramsData = res
+      }
+    )
   }
 }

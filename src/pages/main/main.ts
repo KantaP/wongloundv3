@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ModalController} from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs'
 import { ProfilePage } from '../profile/profile'
 import { ReportPage } from '../report/report'
@@ -8,6 +8,7 @@ import { StorageSession } from '../../providers/storage-session'
 import { Paramservice } from '../../providers/paramservice'
 import { External } from '../../providers/external'
 import { ContactPage } from '../contact/contact'
+import { ConditionPage } from '../condition/condition'
 /*
   Generated class for the Main page.
 
@@ -30,8 +31,8 @@ export class MainPage {
   private reportPage;
   private contactPage;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams , private _storage: StorageSession , public paramservice: Paramservice , public _external: External) {
-    this.rootPage = TabsPage;
+  constructor(public navCtrl: NavController, public navParams: NavParams , private _storage: StorageSession , public paramservice: Paramservice , public _external: External , public _modal: ModalController) {
+    //this.rootPage = TabsPage;
     this.homePage = TabsPage;
     this.profilePage = ProfilePage
     this.reportPage = ReportPage
@@ -47,7 +48,7 @@ export class MainPage {
     if(this.paramservice.paramsData.type == 1) {
       return (this.paramservice.paramsData.profile_picture == '')? 'assets/icon/user.jpg' : this._external.loadImage(this.paramservice.paramsData.profile_picture)
     }else{
-      return this._external.loadImage(this.paramservice.paramsData.shop_image_1) 
+      return (!this.paramservice.paramsData.shop_image_1) ? 'assets/icon/user.jpg'  : this._external.loadImage(this.paramservice.paramsData.shop_image_1) 
     }
   }
 
@@ -64,23 +65,47 @@ export class MainPage {
   } 
 
   ionViewDidLoad() {
-    this.paramservice.paramsData = this.navParams.get('userProfile') 
-    console.log(this.paramservice.paramsData)
-    this._external.findProvince()
-    .subscribe(
-      res => {
-        var resJson = res.json()
-        this.provinces = resJson
+    this._storage.get('alreadyReadCondition')
+    .then((data)=>{
+      if(data == null) {
+        let modal = this._modal.create(ConditionPage);
+        modal.present();
+        modal.onDidDismiss(data => {
+          if(data.result == 'accept') {
+            this.rootPage = TabsPage
+            this._storage.set('alreadyReadCondition',"true")
+            //this.paramservice.paramsData = this.navParams.get('userProfile') 
+            this._external.findProvince()
+            .subscribe(
+              res => {
+                var resJson = res.json()
+                this.provinces = resJson
+                
+              }
+            )
+            this.paramservice.getProvince().subscribe((data)=>{
+                this.province = data
+              })
+          }
+        });
+      }else{
+        this.rootPage = TabsPage
+        this._external.findProvince()
+        .subscribe(
+          res => {
+            var resJson = res.json()
+            this.provinces = resJson
+            
+          }
+        )
+        this.paramservice.getProvince().subscribe((data)=>{
+            this.province = data
+          })
       }
-      
-    )
-
-    this.paramservice.provinceSelected.subscribe((data)=>this.province = data)
+    })
   }
-
-  provinceSelect() {
-    // console.log(this.paramservice.provinceSelected)
-    this.paramservice.provinceSelected.next(this.province)
+  provinceSelect($ev) {
+    this.paramservice.setProvince($ev)
   }
 
   openPage(p) {
@@ -89,7 +114,8 @@ export class MainPage {
 
   signOut() {
     this._storage.remove('userProfile')
-    this.navCtrl.setRoot(LoginPage)
+    this.paramservice.setInitialProfile()
+    this.paramservice.setUserData({type:3})
   }
 
   goToReport() {
@@ -98,5 +124,9 @@ export class MainPage {
 
   goToContact() {
     this.navCtrl.push(ContactPage)
+  }
+
+  signIn() {
+    this.navCtrl.push(LoginPage)
   }
 }

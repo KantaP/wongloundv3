@@ -1,1 +1,1 @@
-export const API_URL = 'http://128.199.210.96/api/index.php/'
+export const API_URL = 'http://wonglound-api.xyz/api/index.php/'

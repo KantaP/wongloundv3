@@ -16,6 +16,7 @@ import { CashoutPage } from '../pages/cashout/cashout'
 import { SignupOwnerPage } from '../pages/signup-owner/signup-owner'
 import { SignupTypePage } from '../pages/signup-type/signup-type'
 import { FavouritePage } from '../pages/favourite/favourite'
+import { ConditionPage } from '../pages/condition/condition'
 import { SearchPage } from '../pages/search/search'
 import { ReportPage } from '../pages/report/report'
 import { Internal } from '../providers/internal'
@@ -53,7 +54,8 @@ import { SplashScreen } from '@ionic-native/splash-screen'
     SearchPage,
     ReportPage,
     CashoutPage,
-    FullimagePage
+    FullimagePage,
+    ConditionPage
   ],
   imports: [
     BrowserModule,
@@ -80,7 +82,8 @@ import { SplashScreen } from '@ionic-native/splash-screen'
     SearchPage,
     ReportPage,
     CashoutPage,
-    FullimagePage
+    FullimagePage,
+    ConditionPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler} , Internal , 
   External , StorageSession , Paramservice,Camera  ,Facebook , Geolocation , FilePath , File , 

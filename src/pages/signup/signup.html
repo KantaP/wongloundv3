@@ -12,7 +12,7 @@
           <ion-icon name='menu'></ion-icon>
         </button>
         <ion-title class="font-white-color">
-            <img src="assets/logo.png" width="32" height="32" />
+<!--            <img src="assets/logo.png" width="32" height="32" />-->
         </ion-title>
     </ion-navbar>
 
@@ -22,12 +22,12 @@
     <form [formGroup]="user" novalidate>
         <ion-grid>
             <ion-row class="margin-top-50 justify-center align-center">
-                <img src="assets/logo.png" width="200" height="150" />
+                <img src="assets/logo.png" style="width:50%;height:50%;"  />
             </ion-row>
             <ion-row [ngClass]="{'margin-top-50 justify-center align-center': true , 'form-error': !user.controls.email.valid && submitted}">
                 <ion-item>
-                    <ion-label fixed>ชื่อผู้ใช้: </ion-label>
-                    <ion-input type="text" formControlName="email"></ion-input>
+                    <ion-label fixed>Email: </ion-label>
+                    <ion-input type="email" formControlName="email"></ion-input>
                 </ion-item>
             </ion-row>
             <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.password.valid && submitted}">
@@ -36,24 +36,23 @@
                     <ion-input type="password" formControlName="password"></ion-input>
                 </ion-item>
             </ion-row>
-            <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.firstname.valid && submitted}">
+            <!--<ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.firstname.valid && submitted}">
                 <ion-item>
                     <ion-label fixed>ชื่อ</ion-label>
                     <ion-input type="text" formControlName="firstname"></ion-input>
                 </ion-item>
-            </ion-row>
+            </ion-row>-->
             <!--<ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.surname.valid && submitted}">
                 <ion-item>
                     <ion-label fixed>นามสกุล</ion-label>
                     <ion-input type="text" formControlName="surname"></ion-input>
                 </ion-item>
             </ion-row>-->
-            <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.gender.valid && submitted}">
+             <!-- <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.gender.valid && submitted}">
                 <ion-item>
                     <ion-label fixed>เพศ</ion-label>
                     <ion-select formControlName="gender">
-                        <!--<ion-option value=""></ion-option>-->
-                        <ion-option value="M">ชาย</ion-option>
+                        <ion-option value="M" selected>ชาย</ion-option>
                         <ion-option value="F">หญิง</ion-option>
                     </ion-select>
                 </ion-item>
@@ -63,7 +62,7 @@
                     <ion-label fixed>เบอร์โทร</ion-label>
                     <ion-input type="tel" formControlName="phone"></ion-input>
                 </ion-item>
-            </ion-row>
+            </ion-row>  -->
             <!--<ion-row [ngClass]="{'margin-top-10 justify-center align-center': true , 'form-error': !user.controls.province.valid && submitted}">
                 <ion-item>
                     <ion-label fixed>จังหวัด</ion-label>

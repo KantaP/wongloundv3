@@ -3,9 +3,9 @@ import { NavController, NavParams , ActionSheetController, ToastController ,  Pl
 import { Paramservice } from '../../providers/paramservice'
 import { Internal } from '../../providers/internal'
 import { External } from '../../providers/external'
-import { ShopRecommended , ShopPromotion} from '../../models/request'
+import { ShopRecommended } from '../../models/request'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import * as moment from 'moment'
+import * as moment from 'moment' 
 import { Camera } from '@ionic-native/camera';
 import { Transfer , TransferObject } from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
@@ -40,12 +40,13 @@ export class ShopProfilePage {
   profile: any
   provinces: any
   createNewPro: boolean
-  promotions : any
+  promotions : Array<any>
   _moment: any
   newPromotion: FormGroup
   api: string
   lastImage: any
   loading: any
+  loading2: any
 
   promotionImage: any
   promotionImageFileName: any
@@ -93,7 +94,9 @@ export class ShopProfilePage {
     this.sliderOptions = {
        pager: true
     }
+    this.promotions = []
     this.promotionId = 0
+    this.loading2 = true
   }
 
   showFullImage(imgUrl: string) {
@@ -115,6 +118,7 @@ export class ShopProfilePage {
     // this.slides['autoplay'] = 3000
     // this.slides2['autoplay']  = 3000
     // this.slides.autoplay = 3000
+    this.promotions = []
     // console.log('ionViewDidLoad ShopProfilePage');
     this.editMode = false
     this.currentView = 'recommended'
@@ -132,6 +136,10 @@ export class ShopProfilePage {
           //   else this.profile[`shop_image_${index}`] = 'assets/noimage.jpeg'
           // } 
           this.showSlide = true
+          this.sliderObservable = setInterval(()=>{
+            this.autoPlaySlider()
+          },3000)
+          this.loading2 = false
         }
       )
       this._external.incrementCountView(this.shopId)
@@ -149,6 +157,10 @@ export class ShopProfilePage {
       //   // else this.profile[`shop_image_${index}`] = 'assets/noimage.jpeg'
       // } 
       this.showSlide = true
+      this.sliderObservable = setInterval(()=>{
+        this.autoPlaySlider()
+      },3000)
+      this.loading2 = false
     }
     
     // console.log(this.profile)
@@ -193,7 +205,6 @@ export class ShopProfilePage {
           }
         )
       }
-      
   }
 
   alert(message) {
@@ -264,7 +275,7 @@ export class ShopProfilePage {
       this._external.setFavouriteShop(this._param.paramsData.user_id , this.shopId)
       .subscribe(
         res => {
-       
+
         },
         err => {
           this.favouriteIcon = 'star-outline'
@@ -278,22 +289,26 @@ export class ShopProfilePage {
   ionViewWillEnter(){
     
     this.loadPromotion()
-    this.sliderObservable = setInterval(()=>{
-      this.autoPlaySlider()
-    },3000)
+    
   }
 
   ionViewDidLeave() {
     clearInterval(this.sliderObservable)
+    this.map = null
   }
 
   loadPromotion() {
+    clearInterval(this.sliderObservable)
     if(this.mode == 'view') {
       this._external.findPromotionByShop(this.shopId)
       .subscribe(
         res => {
           var resJson = res.json()
-          this.promotions = resJson.data
+          this.promotions = resJson.data || []
+          //console.log(this.promotions)
+          this.sliderObservable = setInterval(()=>{
+            this.autoPlaySlider()
+          },3000)
         }
       )
     }else {
@@ -301,7 +316,11 @@ export class ShopProfilePage {
       .subscribe(
         res => {
           var resJson = res.json()
-          this.promotions = resJson.data
+          this.promotions = resJson.data || []
+          //console.log(this.promotions)
+          this.sliderObservable = setInterval(()=>{
+            this.autoPlaySlider()
+          },3000)
         }
       )
     }
@@ -322,18 +341,22 @@ export class ShopProfilePage {
       }
 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-
+      this.map.infowindow = new google.maps.InfoWindow()
       var marker = new google.maps.Marker({
           position: latLng,
           map: this.map
         });
+      this.marker.addListener('click', function(){
+        this.map.infowindow.setContent(marker.content);
+        this.map.infowindow.open(this.map,marker);
+      });
       this.marker = marker
  
       if(this.mode == 'edit') {
         this.map.addListener('click', (e) => {
           var marker = new google.maps.Marker({
             position: e.latLng,
-            map: this.map
+            map: this.map,
           });
           this.myLatLng = e.latLng
           if(this.marker !== null) {
@@ -343,6 +366,7 @@ export class ShopProfilePage {
           }else{
             this.marker = marker
           }
+          
           this.profile.latitude = this.myLatLng.lat()
           this.profile.longitude = this.myLatLng.lng()
         });
@@ -355,7 +379,7 @@ export class ShopProfilePage {
 
   toggleView(view) {
     this.currentView = view
-    if(view == 'profile' || view == 'map') setTimeout(()=>this.initMap() , 2500)
+    if(view == 'profile' || view == 'map') setTimeout(()=>this.initMap() , 500)
   }
 
   updateRecommended() {
@@ -558,19 +582,6 @@ export class ShopProfilePage {
                 if(resJson['status']) {
                   this.loadPromotion()
                   this.hideFormAddPro()
-                }else{
-                  let alert = this._alert.create({
-                    title: 'แจ้งเตือน',
-                    message: 'ลบโปรโมชั่นๆไม่สำเร็จ',
-                    buttons: [
-                      {
-                        text: 'ตกลง',
-                        handler: ()=> {
-
-                        }
-                      }
-                    ]
-                  })
                 }
               }
             )

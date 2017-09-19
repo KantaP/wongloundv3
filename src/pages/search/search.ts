@@ -33,7 +33,7 @@ export class SearchPage {
     this.keys = []
     this.keys2 = []
     this.getShop('')
-    this._param.provinceSelected.subscribe(
+    this._param.getProvince().subscribe(
       data => {
         this.province = data
         this.getShop('')

@@ -10,8 +10,9 @@
         <button ion-button menuToggle icon-only>
           <ion-icon name='menu'></ion-icon>
         </button>
-        <ion-title class="font-white-color">
-            <img src="assets/logo.png" width="32" height="32" />
+        <ion-title class="font-white-color" >
+<!--            <img src="assets/logo.png" width="32" height="32" />-->
+<div style='text-align:right;color:#e6c12f;font-size:20px' >วงเล่า</div>
         </ion-title>
     </ion-navbar>
 
@@ -19,7 +20,7 @@
 
 
 <ion-content class="bg">
-    <ion-grid>
+    <ion-grid *ngIf="!loading2; else loadingBox">
         <ion-row>
             <div style="position:absolute;top:20px;right:20px;z-index:1000;" *ngIf="mode == 'view' && userType == 1 && checkFavourite" (click)="toggleFavourite()">
                 <ion-icon [name]="favouriteIcon" style="color:#e6c12f;font-size:2em;"></ion-icon>
@@ -27,7 +28,7 @@
             <div style="position:absolute;top:50px;right:25px;z-index:1000;" *ngIf="mode == 'view' && userType == 1 && checkRegisterActivity" (click)="toggleActivity()">
                 <ion-icon name="hand" [ios]="activityIcon" [md]="activityIcon" style="color:#e6c12f;font-size:2em;"></ion-icon>
             </div>
-            <ion-slides #profilePic  pager style="max-height:200px;" *ngIf="mode == 'edit'">
+            <ion-slides #profilePic  pager style="max-height:200px;" *ngIf="mode == 'edit' && showSlide">
                 <ion-slide (click)="presentActionSheet(1)">
                     <img [src]="_external.loadImage(profile.shop_image_1)" >
                 </ion-slide>
@@ -101,39 +102,39 @@
                 <input type="text" *ngIf="editMode" />
             </ion-col>
         </ion-row>-->
-        <ion-row class="justify-flex-start margin-top-10" style="border: 1px solid #e6c12f !important; border-radius: 5px;"> 
+        <ion-row class="justify-flex-start" style="border-bottom: 1px solid #e6c12f !important;">
             <ion-col>
                  <span style="font-weight:bold;color:#e6c12f;">เวลาทำการ {{_moment(profile.open_time,'HH:mm:ss').format('HH:mm')}} - {{_moment(profile.close_time,'HH:mm:ss').format('HH:mm')}}</span>
             </ion-col>
         </ion-row>
-        <ion-row class="justify-flex-start margin-top-10" style="border: 1px solid #e6c12f !important; border-radius: 5px;"> 
+        <ion-row class="justify-flex-start" style="border-bottom: 1px solid #e6c12f !important;">
             <ion-col>
                  <span style="font-weight:bold;color:#e6c12f;position:relative;top:2px;"><ion-icon name="call" item-left style="color:#fff;"></ion-icon>
                  <a href="tel: {{profile.phone_number}}">{{profile.phone_number}}</a></span>
             </ion-col>
         </ion-row>
-        <ion-row class="margin-top-10">
-            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'recommended' , 'custom-border': true}">
-                <button block ion-button clear (click)="toggleView('recommended')">แนะนำร้าน</button>
+        <ion-row style="border-bottom: 1px solid #e6c12f !important;">
+            <ion-col [ngClass]="{'padding-3' : true , 'tab-active': currentView == 'recommended' , 'custom-border': true}">
+                <button block ion-button clear style="border-right: 1px solid #e6c12f !important;border-radius:0px !important;color: #e6c12f !important" (click)="toggleView('recommended')">แนะนำร้าน</button>
             </ion-col>
-            <ion-col [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'promotion' , 'custom-border': true}">
-                <button block ion-button clear (click)="toggleView('promotion')">โปรโมชั่น</button>
+            <ion-col [ngClass]="{'padding-3' : true , 'tab-active': currentView == 'promotion' , 'custom-border': true}">
+                <button block ion-button clear style="border-right: 1px solid #e6c12f !important;border-radius:0px !important;color: #e6c12f !important" (click)="toggleView('promotion')">โปรโมชั่น</button>
             </ion-col>
-            <ion-col *ngIf="mode == 'view'" [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'map' , 'custom-border': true}">
-                <button block ion-button clear (click)="toggleView('map')">แผนที่</button>
+            <ion-col *ngIf="mode == 'view'" [ngClass]="{'padding-3' : true , 'tab-active': currentView == 'map' , 'custom-border': true}">
+                <button block ion-button clear (click)="toggleView('map')" style="color: #e6c12f !important">แผนที่</button>
             </ion-col>
-            <ion-col *ngIf="mode == 'edit'" [ngClass]="{'padding-0' : true , 'tab-active': currentView == 'profile' , 'custom-border': true}">
-                <button block ion-button clear (click)="toggleView('profile')">ข้อมูลส่วนตัว</button>
+            <ion-col *ngIf="mode == 'edit'" [ngClass]="{'padding-3' : true , 'tab-active': currentView == 'profile' , 'custom-border': true}">
+                <button block ion-button clear (click)="toggleView('profile')" style="color: #e6c12f !important" >ข้อมูลส่วนตัว</button>
             </ion-col>
         </ion-row>
-        <ion-row *ngIf="mode == 'view'" class="margin-top-10 padding-left-20 padding-right-20 height-5x-50-px">
+        <ion-row *ngIf="mode == 'view'" class="margin-top-10 height-5x-50-px">
             <ion-grid *ngIf="currentView == 'recommended'" >
-                <div class="font-white-color">
-                    {{profile.recommended}}
+                <div class="padding-5 font-white-color">
+                    {{profile.recommended || 'ยังไม่มีคำแนะนำเกี่ยวร้านนี้'}}
                 </div>
             </ion-grid>
             <ion-grid *ngIf="currentView == 'promotion'">
-                <ion-list *ngIf="!readOnly">
+                <ion-list *ngIf="!readOnly && promotions?.length > 0">
                     <ion-item *ngFor="let item of promotions ; let i = index" (click)="showPromotionDetail(i , true)">
                         <ion-avatar item-left>
                             <img [src]="item.image_promotion">
@@ -144,6 +145,7 @@
                         <!--<p>{{item.description}}</p>-->
                     </ion-item>
                 </ion-list>
+                <ion-row *ngIf="promotions?.length == 0"><div class="padding-5 font-white-color">ยังไม่มีโปรโมชั่นในขณะนี้</div></ion-row>
             </ion-grid>
             <ion-grid *ngIf="currentView == 'promotion' && readOnly">
                     <form [formGroup]="newPromotion" novalidate>
@@ -158,14 +160,14 @@
                         
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <!--<ion-label fixed>ชื่อโปรโมชั่น</ion-label>-->
+                                <ion-label fixed>ชื่อโปรโมชั่น</ion-label>
                                 <ion-input type="text" formControlName="promotion" readonly></ion-input>
                                 <!--<div class="font-white-color">{{newPromotion.controls.promotion.value}}</div>-->
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <!--<ion-label fixed>รายละเอียด</ion-label>-->
+                                <ion-label fixed>รายละเอียด</ion-label>
                                 <ion-textarea class="font-white-color height-5x-50-px" formControlName="description" readonly></ion-textarea>
                                 <!--<div class="font-white-color">{{newPromotion.controls.description.value}}</div>-->
                             </ion-item>
@@ -198,24 +200,24 @@
                     </ion-row>
                 </ion-grid>
         </ion-row>
-        <ion-row *ngIf="mode == 'edit'" class="margin-top-20 padding-left-20 padding-right-20">
+        <ion-row *ngIf="mode == 'edit'" class="margin-top-20">
             <ion-grid *ngIf="currentView == 'recommended'" >
                 <ion-row>
                     <ion-item>
-                        <ion-textarea class="font-white-color height-5x-50-px" [(ngModel)]="profile.recommended"></ion-textarea>
+                        <ion-textarea class="font-white-color height-5x-50-px" [(ngModel)]="profile.recommended"  data-title="กรุณากรอกรายละเอียด"></ion-textarea>
                     </ion-item> 
                     
                 </ion-row>
                 <ion-row class="margin-top-20">
-                    <button ion-button outline block color="light" (click)="updateRecommended()">บันทึก</button>
+                    <button ion-button outline block color="light" (click)="updateRecommended()" >บันทึก</button>
                 </ion-row>
             </ion-grid>
             <ion-grid *ngIf="currentView == 'promotion'">
                 <ion-row>
-                    <button *ngIf="!createNewPro && !updatePromotion" ion-button block outline color="light" type="button" (click)="showFormAddPro()">
+                    <button *ngIf="!createNewPro && !updatePromotion" ion-button block outline color="light" type="button" (click)="showFormAddPro()" >
                         เพิ่มโปรโมชั่น
                     </button>
-                    <button *ngIf="createNewPro || updatePromotion" ion-button block outline color="light" type="button" (click)="hideFormAddPro()">
+                    <button *ngIf="createNewPro || updatePromotion" ion-button block outline color="light" type="button" (click)="hideFormAddPro()" >
                         ย้อนกลับ
                     </button>
                 </ion-row>
@@ -236,20 +238,20 @@
                         
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <!--<ion-label fixed>ชื่อโปรโมชั่น</ion-label>-->
-                                <ion-input type="text" formControlName="promotion" placeholder="ชื่อโปรโมชั่น"></ion-input>
+                                <ion-label fixed>ชื่อโปรโมชั่น</ion-label>
+                                <ion-input type="text" formControlName="promotion" data-title="ชื่อโปรโมชั่น"></ion-input>
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
-                                <!--<ion-label fixed>รายละเอียด</ion-label>-->
-                                <ion-textarea class="font-white-color height-5x-50-px" formControlName="description" placeholder="รายละเอียด"></ion-textarea>
+                                <ion-label fixed>รายละเอียด</ion-label>
+                                <ion-textarea class="font-white-color height-5x-50-px" formControlName="description" data-title="รายละเอียด"></ion-textarea>
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-item>
                                 <ion-label fixed>วันที่เริ่ม</ion-label>
-                                <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" class="font-white-color" formControlName="startDate"></ion-datetime>
+                                <ion-datetime displayFormat="DD MMM YYYY" pickerFormat="DD MMM YYYY" class="font-white-color" max="2050-12-31"  formControlName="startDate"></ion-datetime>
                             </ion-item>
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
@@ -260,21 +262,21 @@
                         </ion-row>
                         <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                             <ion-col class="width-flex-33">
-                                <button ion-button block icon-left outline color="light" type="button" (click)="(createNewPro) ? presentActionSheet() : presentActionSheet(4)">
+                                <button ion-button block icon-left outline color="light" type="button" (click)="(createNewPro) ? presentActionSheet() : presentActionSheet(4)" style="font-size:13px" >
                                     <ion-icon name="add"></ion-icon>
                                     เพิ่มรูปภาพ
                                 </button>
                             </ion-col>
                             <ion-col class="width-flex-33">
-                                <button *ngIf="createNewPro" ion-button block outline color="light" type="button" (click)="(this.promotionImage == '') ? createPromotion() : createPromotionWithImage()">
+                                <button *ngIf="createNewPro" ion-button block outline color="light" type="button" (click)="(this.promotionImage == '') ? createPromotion() : createPromotionWithImage()" style="font-size:13px">
                                     บันทึก 
                                 </button>
-                                <button *ngIf="updatePromotion" ion-button block outline color="light" type="button" (click)="(!this.promotionImageChange) ? editPromotion() : editPromotionWithImage()">
+                                <button *ngIf="updatePromotion" ion-button block outline color="light" type="button" (click)="(!this.promotionImageChange) ? editPromotion() : editPromotionWithImage()" style="font-size:13px">
                                     อัพเดตข้อมูล
                                 </button>
                             </ion-col> 
                             <ion-col class="width-flex-33">
-                                <button *ngIf="updatePromotion" ion-button block outline color="light" type="button" (click)="deletePromotion()">
+                                <button *ngIf="updatePromotion" ion-button block outline color="light" type="button" (click)="deletePromotion()" style="font-size:13px">
                                     ลบโปรโมชั่น 
                                 </button>
                             </ion-col>
@@ -288,65 +290,65 @@
             <ion-grid *ngIf="currentView == 'profile'">
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <!--<ion-label fixed>ชื่อผู้ใช้: </ion-label>-->
-                        <ion-input type="text" [(ngModel)]="profile.email" placeholder="ชื่อผู้ใช้"></ion-input>
+                        <ion-label fixed>ชื่อผู้ใช้: </ion-label>
+                        <ion-input type="text" [(ngModel)]="profile.email" data-title="ชื่อผู้ใช้"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <!--<ion-label fixed>ชื่อร้าน</ion-label>-->
-                        <ion-input type="text" [(ngModel)]="profile.shop_name" placeholder="ชื่อร้าน"></ion-input>
+                        <ion-label fixed>ชื่อร้าน</ion-label>
+                        <ion-input type="text" [(ngModel)]="profile.shop_name" data-title="ชื่อร้าน"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <!--<ion-label fixed>ชื่อ (ผู้ติดต่อ)</ion-label>-->
-                        <ion-input type="text" [(ngModel)]="profile.firstname" placeholder="ชื่อ (ผู้ติดต่อ)"></ion-input>
+                        <ion-label fixed>ชื่อ (ผู้ติดต่อ)</ion-label>
+                        <ion-input type="text" [(ngModel)]="profile.firstname" data-title="ชื่อ (ผู้ติดต่อ)"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <!--<ion-label fixed>นามสกุล</ion-label>-->
-                        <ion-input type="text" [(ngModel)]="profile.surname" placeholder="นามสกุล"></ion-input>
+                        <ion-label fixed>นามสกุล</ion-label>
+                        <ion-input type="text" [(ngModel)]="profile.surname" data-title="นามสกุล"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <!--<ion-label fixed>เบอร์โทร</ion-label>-->
-                        <ion-input type="tel" [(ngModel)]="profile.phone_number" placeholder="เบอร์โทรศัพท์"></ion-input>
+                        <ion-label fixed>เบอร์โทร</ion-label>
+                        <ion-input type="tel" [(ngModel)]="profile.phone_number" data-title="เบอร์โทรศัพท์"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <!--<ion-label fixed>ที่อยู่</ion-label>-->
-                        <ion-textarea class="font-white-color height-5x-50-px" [(ngModel)]="profile.address" placeholder="ที่อยู่"></ion-textarea>
+                        <ion-label fixed>ที่อยู่</ion-label>
+                        <ion-textarea class="font-white-color height-5x-50-px" [(ngModel)]="profile.address" data-title="ที่อยู่"></ion-textarea>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <!--<ion-label fixed>ตำบล</ion-label>-->
-                        <ion-input type="text" [(ngModel)]="profile.sub_district" placeholder="ตำบล"></ion-input>
+                        <ion-label fixed>ตำบล</ion-label>
+                        <ion-input type="text" [(ngModel)]="profile.sub_district" data-title="ตำบล"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true }">
                     <ion-item>
-                        <!--<ion-label fixed>อำเภอ</ion-label>-->
-                        <ion-input type="text" [(ngModel)]="profile.district" placeholder="อำเภอ"></ion-input>
+                        <ion-label fixed>อำเภอ</ion-label>
+                        <ion-input type="text" [(ngModel)]="profile.district" data-title="อำเภอ"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
                         <ion-label fixed>จังหวัด</ion-label>
                         <ion-select [(ngModel)]="profile.province" class="font-white-color">
-                            <!--<ion-option value="">จังหวัด</ion-option>-->
+                            <ion-option value="">จังหวัด</ion-option>
                             <ion-option *ngFor="let province of provinces" [value]="province.name">{{province.name}}</ion-option>
                         </ion-select>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
                     <ion-item>
-                        <!--<ion-label fixed>ไปรษณีย์</ion-label>-->
-                        <ion-input type="tel" [(ngModel)]="profile.postal_code" placeholder="ไปรษณีย์"></ion-input>
+                        <ion-label fixed>ไปรษณีย์</ion-label>
+                        <ion-input type="tel" [(ngModel)]="profile.postal_code" data-title="ไปรษณีย์"></ion-input>
                     </ion-item>
                 </ion-row>
                 <ion-row [ngClass]="{'margin-top-10 justify-center align-center': true}">
@@ -395,3 +397,12 @@
         </ion-row>
     </ion-grid>
 </ion-content>
+
+<ng-template #loadingBox >
+    <ion-grid style="height:100%">
+        <ion-row class="margin-top-10 justify-center align-center">
+            <img src="assets/logo.png" style="width:50%;height:50%;"/>
+        </ion-row>
+    </ion-grid>
+        
+</ng-template>

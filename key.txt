@@ -1,0 +1,3 @@
+android key
+alias wonglound
+pass 123456

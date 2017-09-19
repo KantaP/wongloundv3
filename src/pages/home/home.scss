@@ -1,5 +1,19 @@
 page-home {
     .main-menu {
-        border-right: 1px solid;border-radius:0px !important;
+        // border-right: 1px solid;border-radius:0px !important;
+        height: auto;
     }
+    .button-ios{
+        height: auto;
+    }
+
 }
+.list-ios > .item-block:first-child{
+    border: none;
+}
+.main-menu{
+    border-radius: 0px !important;
+    width:150px;
+    border-right:1px solid #e6c12f;
+}
+

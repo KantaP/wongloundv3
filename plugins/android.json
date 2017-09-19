@@ -1,0 +1,64 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-email": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-facebook4": {
+            "APP_ID": "1899665120274158",
+            "APP_NAME": "wong_lound",
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-filepath": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_ANDROID": "AIzaSyCBslJkjysed7ph6zIA_PLq2nE0z-ceTSc",
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ionicframework.wonglound363813"
+        }
+    }
+}
